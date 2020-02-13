@@ -62,5 +62,40 @@ namespace ProjectTemplate
 				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
 			}
 		}
+
+        [WebMethod(EnableSession = true)]
+
+        public string AddUser(string first, string last, string email, string pass)
+        {
+
+            ///webmethod to a newuser to the database
+            ///
+
+            var UserFirst = first;
+            var UserLast = last;
+            var UserEmail = email;
+            var ParkingPass = pass;
+            
+
+            try
+            {
+                string addNewUser = "INSERT INTO `abracadevs`.`users` ( `first_name`, `last_name`, `email`, `permit`, `status`, `admin`) VALUES ('" + UserFirst + "', '" + UserLast + "', '" + UserEmail + "', 'a', 'pending', '0');";
+                    MySqlConnection con = new MySqlConnection(getConString());
+                    MySqlCommand cmd = new MySqlCommand(addNewUser, con);
+                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                    DataTable table = new DataTable();
+                    adapter.Fill(table);
+                    return "Success!";
+
+
+            }
+            
+
+            catch (Exception e)
+            {
+                return "That email address already has an account. Please go back and use a different email address.  Error: " + e.Message;
+            }
+        }
+
 	}
 }
