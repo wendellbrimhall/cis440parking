@@ -5,27 +5,32 @@
     <title></title>
     <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
     <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
     <script type="text/javascript">
-    function TestButtonHandler() {
-            var webMethod = "ProjectServices.asmx/TestConnection";
-            var parameters = "{}";
+        function AddUserHandler() {
+            var webMethod = "ProjectServices.asmx/AddUser";
+            var parameters = { f: $("#fname").val(), l: $("#lname").val(), e: $("#email").val(), p: $("#pass").val()};
+            console.log(parameters)
+            var json_data = JSON.stringify(parameters)
 
             //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
-                data: parameters,
+                data: json_data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (msg) {
-                    alert("success")
+                    var responseFromServer = msg.d;
+                    alert(responseFromServer);
                 },
                 error: function (e) {
                     alert("this code will only execute if javascript is unable to access the webservice");
                 }
             });
-        }</script>
+        }
+    </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
     <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
     <style>
@@ -33,26 +38,29 @@
     <!--END OF YOUR OWN CSS-->
 </head>
 <body>
+    <h2>Create an account</h2>
+
     <form>
-
-        <form>
-            First name:<br>
-            <input type="text" name="firstname">
-            <br>
-            Last name:<br>
-            <input type="text" name="lastname">
-            <br />
-            Email:<br>
-            <input type="text" name="email">
-
-
-            <br><br>
-            <button onclick="javascript: TestButtonHandler();">Click here to test connection!</button>
+        First name:<br>
+        <input type="text" id="fname">
+        <br>
+        Last name:<br>
+        <input type="text" id="lname">
+        <br>
+        Email:<br>
+        <input type="text" id="email">
+        <br>
+        Pass:<br>
+        <input type="text" id="pass">
 
 
-        </form>
+        <br>
+        <button onclick="javascript: AddUserHandler();">Click here to test connection!</button>
 
 
     </form>
+
+
+
 </body>
 </html>
