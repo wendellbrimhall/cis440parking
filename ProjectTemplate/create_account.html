@@ -10,7 +10,9 @@
     <script type="text/javascript">
         function AddUserHandler() {
             var webMethod = "ProjectServices.asmx/AddUser";
-            var parameters = { f: $("#fname").val(), l: $("#lname").val(), e: $("#email").val(), p: $("#pass").val()};
+            console.log("code ran")
+
+            var parameters = { first: $('#fname').val(), last: $('#lname').val(), email: $('#email').val(), pass: $('#pass').val(), pw: $('#password').val(), licenseplate: $('#license').val() };
             console.log(parameters)
             var json_data = JSON.stringify(parameters)
 
@@ -23,10 +25,11 @@
                 dataType: "json",
                 success: function (msg) {
                     var responseFromServer = msg.d;
-                    alert(responseFromServer);
+                    console.log(responseFromServer);
                 },
                 error: function (e) {
-                    alert("this code will only execute if javascript is unable to access the webservice");
+                    var responseFromServer = e.d
+                    console.log("this code will only execute if javascript is unable to access the webservice" + responseFromServer);
                 }
             });
         }
@@ -50,8 +53,22 @@
         Email:<br>
         <input type="text" id="email">
         <br>
-        Pass:<br>
-        <input type="text" id="pass">
+
+        Password:<br>
+        <input type="text" id="password">
+        <br>
+
+        Licencse Plate:<br>
+        <input type="text" id="license" />
+        <br>
+
+        <select id="pass">
+            <option value="volvo">A</option>
+            <option value="saab">B</option>
+            <option value="mercedes">C</option>
+
+        </select>
+
 
 
         <br>
