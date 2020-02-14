@@ -97,5 +97,85 @@ namespace ProjectTemplate
                 return "That email address already has an account. Please go back and use a different email address.  Error: " + e.Message;
             }
         }
+
+        [WebMethod]
+        public Account[] GetAccountRequests()
+        {//LOGIC: get all account requests and return them!
+
+            DataTable sqlDt = new DataTable("users");
+
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            //requests just have active set to 0
+            string sqlSelect = "select user_id, first_name, last_name, email from users where status= 'pending' order by last_name";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<Account> users = new List<Account>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                users.Add(new Account
+                {
+                    user_id = Convert.ToInt32(sqlDt.Rows[i]["user_id"]),
+                    first_name = sqlDt.Rows[i]["first_name"].ToString(),
+                    last_name = sqlDt.Rows[i]["last_name"].ToString(),
+                    email = sqlDt.Rows[i]["email"].ToString()
+                });
+            }
+            //convert the list of accounts to an array and return!
+            return users.ToArray();
+
         }
+        [WebMethod]
+        public void ActivateAccount(int user_id)
+        {
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            //this is a simple update, with parameters to pass in values
+            string sqlSelect = "update users set status='active' where user_id=" + user_id + "";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            //sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(user_id));
+
+            sqlConnection.Open();
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            sqlConnection.Close();
+        }
+        [WebMethod]
+        public void DeactivateAccount(int user_id)
+        {
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            //this is a simple update, with parameters to pass in values
+            string sqlSelect = "update users set status='deactive' where user_id=" + user_id + "";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            //sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(user_id));
+
+            sqlConnection.Open();
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+            }
+            sqlConnection.Close();
+        }
+
+
+
+    }
 }

@@ -92,12 +92,14 @@
   <ItemGroup>
     <Content Include="create_account.html" />
     <Content Include="Global.asax" />
+    <Content Include="view_pending.html" />
     <Content Include="index.html" />
     <Content Include="ProjectServices.asmx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Account.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
