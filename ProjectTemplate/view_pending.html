@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
+    <script type="text/javascript">
+        function load_Accounts() {
+            var webMethod = "ProjectServices.asmx/GetAccountRequests";
+            var parameters = "{}";
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (array) {
+
+
+                    console.log(array);
+                    var data = array.d;
+                    console.log(data);
+
+                    document.write("<h2>Pending Requests</h2>");
+                    document.write("<table id='table'>");
+
+                    for (var i = 0; i < data.length; i++) {
+                        var find = "email" + i;
+                        var finder = data[i].user_id
+                        console.log(array[i]);
+                        document.write('<tr>');
+                        document.write("<td><button onclick='javascript: activate_Account(" + finder + ");'>Activate</button>");
+                        document.write("<td><button onclick='javascript: deny_Account(" + finder + ");'>Deny</button>");
+                        document.write('<td>' + data[i].first_name + '</td><td>' + data[i].last_name + '</td><td id=' + find + '>' + data[i].email + '</td>');
+                        document.write('</tr>');
+                    }
+
+
+
+
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+
+            function activate_Account(id) {
+                var webMethod = "ProjectServices.asmx/ActivateAccount";
+                var parameters = { user_id: id };
+
+                var json_data = JSON.stringify(parameters)
+
+
+                //jQuery ajax method
+                $.ajax({
+                    type: "POST",
+                    url: webMethod,
+                    data: json_data,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function () {
+                        alert("User activated")
+                        location.reload();
+
+                    },
+                    error: function () {
+                        alert("something broke");
+                    }
+
+                });
+
+        }
+
+        function deny_Account(id) {
+            var webMethod = "ProjectServices.asmx/DeactivateAccount";
+            var parameters = { user_id: id };
+
+            var json_data = JSON.stringify(parameters)
+
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function () {
+                    alert("User deactivated")
+                    location.reload();
+
+                },
+                error: function () {
+                    alert("something broke");
+                }
+
+            });
+
+        }
+    </script>
+</head>
+
+
+<body onload="javascript: load_Accounts();">
+
+
+    <div id="container"></div>
+</body>
+</html>
