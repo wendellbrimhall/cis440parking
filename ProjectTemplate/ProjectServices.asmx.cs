@@ -6,6 +6,8 @@ using System.Web.Services;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Net;
+using System.Net.Mail;
 
 namespace ProjectTemplate
 {
@@ -131,11 +133,11 @@ namespace ProjectTemplate
 
         }
         [WebMethod]
-        public void ActivateAccount(int user_id)
+        public void ActivateAccount(int user_id, string email )
         {
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
             //this is a simple update, with parameters to pass in values
-            string sqlSelect = "update users set status='active' where user_id=" + user_id + "";
+            string sqlSelect = "update users set status='active' where user_id=" + user_id+ "";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -146,11 +148,16 @@ namespace ProjectTemplate
             try
             {
                 sqlCommand.ExecuteNonQuery();
+                SendEmail(email);
+                //after activating account SendEmail is called to send notification to user
             }
             catch (Exception e)
             {
             }
             sqlConnection.Close();
+
+            
+
         }
         [WebMethod]
         public void DeactivateAccount(int user_id)
@@ -175,7 +182,42 @@ namespace ProjectTemplate
             sqlConnection.Close();
         }
 
+        [WebMethod]
+        public void SendEmail(string recipient)
+        ///This webmethod will send out an email from cis440parking@asu.edu using googles
+        ///SMTP server. Currently it is just used for sending out a confirmation that the 
+        ///users account has been approved. Will update code later to add additional messages
+        {
+            var toAddress = recipient;
+            var subject = "Parking account approved";
+            var body = "Hello, your parking account has been approved";
 
+
+            using (MailMessage mail = new MailMessage())
+            {
+
+                var smtpAddr = "smtp.gmail.com";
+                var portNumber = 587;
+                var enableSSL = true;
+                var fromAddress = "cis440parking@gmail.com";
+                var password = "!!Abracadevs";
+
+
+                mail.From = new MailAddress(fromAddress);
+                mail.To.Add(toAddress);
+                mail.Subject = subject;
+                mail.Body = body;
+                mail.IsBodyHtml = true;
+                //mail.Attachments.Add(new Attachment("D:\\TestFile.txt"));//--Uncomment this to send any attachment  
+                using (SmtpClient smtp = new SmtpClient(smtpAddr, portNumber))
+                {
+                    smtp.Credentials = new NetworkCredential(fromAddress, password);
+                    smtp.EnableSsl = enableSSL;
+                    smtp.Send(mail);
+
+                }
+            }
+        }
 
     }
 }

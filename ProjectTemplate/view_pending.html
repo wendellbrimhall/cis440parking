@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Pending</title>
     <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -30,18 +30,19 @@
                     document.write("<table id='table'>");
 
                     for (var i = 0; i < data.length; i++) {
-                        var find = "email" + i;
-                        var finder = data[i].user_id
-                        console.log(array[i]);
+                       //This loop goes through each user with pending status and adds their first, last and email to a table
+                        //It will also dynamically add an approve and deny button to each row.
+                        var findEmail = data[i].email;
+                        var finderID = data[i].user_id;
+                        // variables will store the user_id and email address of each row, and place that data in the button function
+                       
+                       
                         document.write('<tr>');
-                        document.write("<td><button onclick='javascript: activate_Account(" + finder + ");'>Activate</button>");
-                        document.write("<td><button onclick='javascript: deny_Account(" + finder + ");'>Deny</button>");
-                        document.write('<td>' + data[i].first_name + '</td><td>' + data[i].last_name + '</td><td id=' + find + '>' + data[i].email + '</td>');
+                        document.write("<td><button onclick='javascript: activate_Account( " + finderID + ",  \"" + findEmail + "\");'>Activate</button>");
+                        document.write("<td><button onclick='javascript: deny_Account(" + finderID + ");'>Deny</button>");
+                        document.write('<td>' + data[i].first_name + '</td><td>' + data[i].last_name + '</td><td>' + data[i].email + '</td>');
                         document.write('</tr>');
                     }
-
-
-
 
                 },
                 error: function (e) {
@@ -51,9 +52,11 @@
 
         }
 
-            function activate_Account(id) {
+            function activate_Account(id, em) {
                 var webMethod = "ProjectServices.asmx/ActivateAccount";
-                var parameters = { user_id: id };
+                //active_Account will send the user_id and email to the ActivateAcccount webservice
+               
+                var parameters = { user_id: id, email: em };
 
                 var json_data = JSON.stringify(parameters)
 
