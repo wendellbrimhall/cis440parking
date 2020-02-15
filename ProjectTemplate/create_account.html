@@ -10,6 +10,10 @@
     <script type="text/javascript">
         function AddUserHandler() {
             var webMethod = "ProjectServices.asmx/AddUser";
+
+
+            //$("#Submit").prop("disabled", "true");
+            $('#Submit').prop('disabled', function (i, v) { return !v; });
             console.log("code ran")
 
             var parameters = { first: $('#fname').val(), last: $('#lname').val(), email: $('#email').val(), pass: $('#pass').val(), pw: $('#password').val(), licenseplate: $('#license').val() };
@@ -25,14 +29,42 @@
                 dataType: "json",
                 success: function (msg) {
                     var responseFromServer = msg.d;
-                    console.log(responseFromServer);
+                    //Handles response from server. 
+                    if (responseFromServer == "Success!") {
+                        window.location.replace("account_confirmation.html");
+
+                    }
+                    else if (responseFromServer == "email") {
+                        $('#Submit').prop('disabled', function (i, v) { return !v; });
+                        $('#email').focus();
+                        alert("This email address is already in use");
+                        
+                    }
+
+                    else if (responseFromServer == "plate") {
+                        $('#Submit').prop('disabled', function (i, v) { return !v; });
+                        $('#license').focus();
+                        alert("This License Plate has already been registered");
+                        
+                        $('#license').focus();
+                    }
+                    else {
+                        alert(responseFromServer)
+                        $('#Submit').prop('disabled', function (i, v) { return !v; });
+                    }
+                    
+                    
+                    
+                    
                 },
                 error: function (e) {
                     var responseFromServer = e.d
-                    console.log("this code will only execute if javascript is unable to access the webservice" + responseFromServer);
+                    alert(responseFromServer)
+                    $("#Submit").attr("enabled", "enabled");
                 }
             });
         }
+        
     </script>
     <!--END OF YOUR OWN JAVASCRIPT-->
     <!--AND YOUR OWN CSS CAN GO HERE AS WELL-->
@@ -72,7 +104,7 @@
 
 
         <br>
-        <button onclick="javascript: AddUserHandler();">Click here to test connection!</button>
+        <button id="Submit" onclick="javascript: AddUserHandler();">Submit</button>
 
 
     </form>
