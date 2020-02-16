@@ -96,7 +96,23 @@ namespace ProjectTemplate
 
             catch (Exception e)
             {
-                return "That email address already has an account. Please go back and use a different email address.  Error: " + e.Message;
+                var str = e.ToString();
+                // Data base is setup to require a unique email and license plate. If a duplicate of either is put in the server will return an error. The follow code will
+                // search the error returned from the server and return appropriate feedback.
+
+                if (str.Contains("email_UNIQUE")){
+                    return "email";
+                }
+
+                if (str.Contains("license_plate_UNIQUE"))
+                {
+                    return "plate";
+                }
+                else
+                {
+                    return str;
+                }    
+                   
             }
         }
 
