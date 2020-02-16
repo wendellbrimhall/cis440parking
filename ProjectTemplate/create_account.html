@@ -10,9 +10,7 @@
     <script type="text/javascript">
         function AddUserHandler() {
             var webMethod = "ProjectServices.asmx/AddUser";
-
-
-            //$("#Submit").prop("disabled", "true");
+                 
             $('#Submit').prop('disabled', function (i, v) { return !v; });
             console.log("code ran")
 
@@ -60,7 +58,7 @@
                 error: function (e) {
                     var responseFromServer = e.d
                     alert(responseFromServer)
-                    $("#Submit").attr("enabled", "enabled");
+                    $('#Submit').prop('disabled', function (i, v) { return !v; });
                 }
             });
         }
