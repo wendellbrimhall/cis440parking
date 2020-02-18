@@ -11,59 +11,60 @@ using System.Net.Mail;
 
 namespace ProjectTemplate
 {
-	[WebService(Namespace = "http://tempuri.org/")]
-	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-	[System.ComponentModel.ToolboxItem(false)]
-	[System.Web.Script.Services.ScriptService]
+    [WebService(Namespace = "http://tempuri.org/")]
+    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+    [System.ComponentModel.ToolboxItem(false)]
+    [System.Web.Script.Services.ScriptService]
 
-	public class ProjectServices : System.Web.Services.WebService
-	{
-		////////////////////////////////////////////////////////////////////////
-		///replace the values of these variables with your database credentials
-		////////////////////////////////////////////////////////////////////////
-		private string dbID = "abracadevs";
-		private string dbPass = "!!Abracadevs";
-		private string dbName = "abracadevs";
-		////////////////////////////////////////////////////////////////////////
-		
-		////////////////////////////////////////////////////////////////////////
-		///call this method anywhere that you need the connection string!
-		////////////////////////////////////////////////////////////////////////
-		private string getConString() {
-			return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName+"; UID=" + dbID + "; PASSWORD=" + dbPass;
-		}
-		////////////////////////////////////////////////////////////////////////
+    public class ProjectServices : System.Web.Services.WebService
+    {
+        ////////////////////////////////////////////////////////////////////////
+        ///replace the values of these variables with your database credentials
+        ////////////////////////////////////////////////////////////////////////
+        private string dbID = "abracadevs";
+        private string dbPass = "!!Abracadevs";
+        private string dbName = "abracadevs";
+        ////////////////////////////////////////////////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////
+        ///call this method anywhere that you need the connection string!
+        ////////////////////////////////////////////////////////////////////////
+        private string getConString()
+        {
+            return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName + "; UID=" + dbID + "; PASSWORD=" + dbPass;
+        }
+        ////////////////////////////////////////////////////////////////////////
 
 
 
-		/////////////////////////////////////////////////////////////////////////
-		//don't forget to include this decoration above each method that you want
-		//to be exposed as a web service!
-		[WebMethod(EnableSession = true)]
-		/////////////////////////////////////////////////////////////////////////
-		public string TestConnection()
-		{
-			try
-			{
-				string testQuery = "select * from users";
+        /////////////////////////////////////////////////////////////////////////
+        //don't forget to include this decoration above each method that you want
+        //to be exposed as a web service!
+        [WebMethod(EnableSession = true)]
+        /////////////////////////////////////////////////////////////////////////
+        public string TestConnection()
+        {
+            try
+            {
+                string testQuery = "select * from users";
 
-				////////////////////////////////////////////////////////////////////////
-				///here's an example of using the getConString method!
-				////////////////////////////////////////////////////////////////////////
-				MySqlConnection con = new MySqlConnection(getConString());
-				////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
+                ///here's an example of using the getConString method!
+                ////////////////////////////////////////////////////////////////////////
+                MySqlConnection con = new MySqlConnection(getConString());
+                ////////////////////////////////////////////////////////////////////////
 
-				MySqlCommand cmd = new MySqlCommand(testQuery, con);
-				MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-				DataTable table = new DataTable();
-				adapter.Fill(table);
-				return "Success!";
-			}
-			catch (Exception e)
-			{
-				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
-			}
-		}
+                MySqlCommand cmd = new MySqlCommand(testQuery, con);
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable table = new DataTable();
+                adapter.Fill(table);
+                return "Success!";
+            }
+            catch (Exception e)
+            {
+                return "Something went wrong, please check your credentials and db name and try again.  Error: " + e.Message;
+            }
+        }
 
         [WebMethod(EnableSession = true)]
 
@@ -100,7 +101,8 @@ namespace ProjectTemplate
                 // Data base is setup to require a unique email and license plate. If a duplicate of either is put in the server will return an error. The follow code will
                 // search the error returned from the server and return appropriate feedback.
 
-                if (str.Contains("email_UNIQUE")){
+                if (str.Contains("email_UNIQUE"))
+                {
                     return "email";
                 }
 
@@ -111,8 +113,8 @@ namespace ProjectTemplate
                 else
                 {
                     return str;
-                }    
-                   
+                }
+
             }
         }
 
@@ -149,11 +151,11 @@ namespace ProjectTemplate
 
         }
         [WebMethod]
-        public void ActivateAccount(int user_id, string email )
+        public void ActivateAccount(int user_id, string email)
         {
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
             //this is a simple update, with parameters to pass in values
-            string sqlSelect = "update users set status='active' where user_id=" + user_id+ "";
+            string sqlSelect = "update users set status='active' where user_id=" + user_id + "";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -172,7 +174,7 @@ namespace ProjectTemplate
             }
             sqlConnection.Close();
 
-            
+
 
         }
         [WebMethod]
@@ -234,6 +236,35 @@ namespace ProjectTemplate
                 }
             }
         }
+        [WebMethod]
+        public ParkingSpaces[] ViewParkingOptions(string lot)
+        {//LOGIC: get all account requests and return them!
 
+            DataTable sqlDt = new DataTable("parkinglot");
+
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            //requests just have active set to 0
+            string sqlSelect = "select parkingSpotName from parkinglot where parkingLotName='" + lot + "';";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<ParkingSpaces> parkinglot = new List<ParkingSpaces>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                parkinglot.Add(new ParkingSpaces
+                {
+
+                    parkingSpotName = sqlDt.Rows[i]["parkingSpotName"].ToString(),
+
+                });
+            }
+            //convert the list of accounts to an array and return!
+            return parkinglot.ToArray();
+        }
     }
 }
