@@ -272,5 +272,45 @@ namespace ProjectTemplate
 
         return success;
         }
+
+        [WebMethod(EnableSession = true)]
+        public History[] ViewHistory()
+        {
+            // var user = Session["user_id"];
+            var user = 1;
+
+
+
+            DataTable sqlDt = new DataTable("reservations");
+
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            string sqlSelect = "select * from reservations where user_id = " + user + ";";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<History> history = new List<History>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                history.Add(new History
+                {
+                    user_id = Convert.ToInt32(sqlDt.Rows[i]["user_id"]),
+                    reservation_ID = Convert.ToInt32(sqlDt.Rows[i]["reservation_id"]),
+                    spaceID = Convert.ToInt32(sqlDt.Rows[i]["spaceID"]),
+                    date = sqlDt.Rows[i]["date"].ToString()
+
+                });
+            }
+           
+
+            return history.ToArray();
+
+
+        }
+
     }
 }

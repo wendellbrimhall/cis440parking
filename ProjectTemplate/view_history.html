@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>View History</title>
+    
+        <!--DO NOT FORGET THIS SCRIPT TAG SO YOU CAN USE JQUERY!!!!!-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!--YOUR OWN JAVASCRIPT CAN GO RIGHT HERE-->
+        <script type="text/javascript">
+        function history() {
+            var webMethod = "ProjectServices.asmx/ViewHistory";
+            var parameters = "{}";
+
+            //jQuery ajax method
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (array) {
+
+
+                    console.log(array);
+                    var data = array.d;
+                    console.log(data);
+
+                    document.write("<h2>Pending Requests</h2>");
+                    document.write("<table id='table'>");
+
+                    for (var i = 0; i < data.length; i++) {
+                       //This loop goes through each user with pending status and adds their first, last and email to a table
+                        //It will also dynamically add an approve and deny button to each row.
+                        var findEmail = data[i].email;
+                        var finderID = data[i].user_id;
+                        // variables will store the user_id and email address of each row, and place that data in the button function
+
+
+                        document.write('<tr>');
+                        document.write("<td><button onclick='javascript: activate_Account( " + finderID + ",  \"" + findEmail + "\");'>Activate</button>");
+                        document.write("<td><button onclick='javascript: deny_Account(" + finderID + ");'>Deny</button>");
+                        document.write('<td>' + data[i].first_name + '</td><td>' + data[i].last_name + '</td><td>' + data[i].email + '</td>');
+                        document.write('</tr>');
+                    }
+
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+</script >
+
+
+</head>
+<body onload="javascript: history()">
+
+</body>
+</html>
