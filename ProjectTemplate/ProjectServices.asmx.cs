@@ -355,7 +355,7 @@ namespace ProjectTemplate
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
-            string sqlSelect = "SELECT * FROM reservations WHERE reserved = 1 AND parkingLotName = 'A' AND date = '" + date + "';";
+            string sqlSelect = "SELECT * FROM reservations WHERE  AND parkingLotName = 'A' AND date = '" + date + "';";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
