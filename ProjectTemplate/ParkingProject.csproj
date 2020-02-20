@@ -93,6 +93,7 @@
     <Content Include="create_account.html" />
     <Content Include="Global.asax" />
     <Content Include="account_confirmation.html" />
+    <Content Include="ParkingOptions.html" />
     <Content Include="view_history.html" />
     <Content Include="view_pending.html" />
     <Content Include="index.html" />
@@ -102,6 +103,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Account.cs" />
+    <Compile Include="ParkingLot.cs" />
     <Compile Include="History.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

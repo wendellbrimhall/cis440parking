@@ -312,5 +312,78 @@ namespace ProjectTemplate
 
         }
 
+
+        [WebMethod]
+        public ParkingLot[] ViewParkingOptions(string date)
+        {
+            // view parking options - see a date selector, taken/ open
+
+            DataTable sqlDt = new DataTable("parkingLots");
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            string sqlSelect = "SELECT * FROM reservations WHERE reserved = 0 AND parkingLotName = 'A' AND date = '" + date + "';";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<ParkingLot> parkingLots = new List<ParkingLot>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                parkingLots.Add(new ParkingLot
+                {
+                    reservation_id = Convert.ToInt32(sqlDt.Rows[i]["reservation_id"]),
+                    space_id = Convert.ToInt32(sqlDt.Rows[i]["spaceID"]),
+                    lotName = sqlDt.Rows[i]["parkingLotName"].ToString(),
+                    spotName = sqlDt.Rows[i]["parkingSpotName"].ToString(),
+                    date = sqlDt.Rows[i]["date"].ToString(),
+                    isReserved = sqlDt.Rows[i]["reserved"].ToString()
+                });
+            }
+            return parkingLots.ToArray();
+        }
+
+        [WebMethod]
+        public ParkingLot[] ViewUnavailableOptions(string date)
+        {
+            // view parking options - see a date selector, taken/ open
+
+            DataTable sqlDt = new DataTable("parkingLots");
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            string sqlSelect = "SELECT * FROM reservations WHERE reserved = 1 AND parkingLotName = 'A' AND date = '" + date + "';";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<ParkingLot> parkingLots = new List<ParkingLot>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                parkingLots.Add(new ParkingLot
+                {
+                    reservation_id = Convert.ToInt32(sqlDt.Rows[i]["reservation_id"]),
+                    space_id = Convert.ToInt32(sqlDt.Rows[i]["spaceID"]),
+                    lotName = sqlDt.Rows[i]["parkingLotName"].ToString(),
+                    spotName = sqlDt.Rows[i]["parkingSpotName"].ToString(),
+                    date = sqlDt.Rows[i]["date"].ToString(),
+                    isReserved = sqlDt.Rows[i]["reserved"].ToString()
+                });
+            }
+            return parkingLots.ToArray();
+        }
+
+
+        
+
+
+
+
     }
 }

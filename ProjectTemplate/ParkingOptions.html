@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Parking Options</title>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+
+        var parkingOptionsArray;
+
+        //this function grabs lot names and spot names
+        function LoadSpots() {
+            //console.log("code ran")
+            var webMethod = "ProjectServices.asmx/ViewParkingOptions";
+            var parameter = { date: $("#enteredDate").val() };
+            var json_data = JSON.stringify(parameter)
+            //var param = {};
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (array) {
+
+                    console.log(parameter);
+
+                    parkingOptionsArray = array.d;
+
+                    document.write('<p>Spot(s) Available:</p>');
+
+                    for (var i = 0; i < parkingOptionsArray.length; i++) {
+                        document.write(parkingOptionsArray[i].spotName + '    <button>Select</button><br></p>');
+                    }
+                    document.write('<hr/>');
+                    
+                }
+            });
+        }
+
+        var unavailableSpotArray;
+        function LoadUnavailableSpots() {
+            var webMethod = "ProjectServices.asmx/ViewUnavailableOptions";
+            var parameter = { date: $("#enteredDate").val() };
+            var json_data = JSON.stringify(parameter)
+            //var param = {};
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (array) {
+
+                    console.log(parameter);
+
+                    unavailableSpotArray = array.d;
+
+                    document.write('<p>Spot(s) Unavailable:</p>');
+
+                    for (var i = 0; i < unavailableSpotArray.length; i++) {
+                        document.write(unavailableSpotArray[i].spotName + '<br></p>');
+                    }
+                    document.write('<hr/>');
+                }
+            });
+
+        }
+
+
+     
+
+
+
+
+    </script>
+</head>
+<body>
+
+
+    <div class="contentContainer">
+        <div class="parkingOptions" name="parkingOptions">
+            <p>Please enter the date you would like to reserve a parking spot (yyyy-mm-dd).</p>
+            Date: <input type="text" id="enteredDate" name="enteredDate">
+            <button onclick="LoadSpots(), LoadUnavailableSpots()">Submit</button>
+            <hr />
+        </div>
+    </div>
+
+</body>
+</html>
