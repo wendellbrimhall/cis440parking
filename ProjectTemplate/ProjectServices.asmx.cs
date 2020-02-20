@@ -236,14 +236,14 @@ namespace ProjectTemplate
         }
 
         [WebMethod(EnableSession = true)] 
-        public bool LogOn(string user_id, string password)
+        public bool LogOn(string email, string password)
         { 
       
         bool success = false;
 
         string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
    
-        string sqlSelect = "SELECT user_id, admin FROM users WHERE user_id=@idValue and password=@passValue";
+        string sqlSelect = "SELECT email, admin FROM users WHERE email=@emailValue and password=@passValue";
 
  
         MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
@@ -251,7 +251,7 @@ namespace ProjectTemplate
         MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
    
-        sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(user_id));
+        sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
         sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(password));
 
 
@@ -264,7 +264,7 @@ namespace ProjectTemplate
         if (sqlDt.Rows.Count > 0)
         {
 
-        Session["user_id"] = sqlDt.Rows[0]["user_id"];
+        //Session["user_id"] = sqlDt.Rows[0]["user_id"];
         Session["admin"] = sqlDt.Rows[0]["admin"];
         success = true;
         sqlConnection.Close();
