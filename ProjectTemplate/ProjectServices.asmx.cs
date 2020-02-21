@@ -322,7 +322,7 @@ namespace ProjectTemplate
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
-            string sqlSelect = "SELECT * FROM reservations WHERE reserved = 0 AND parkingLotName = 'A' AND date = '" + date + "';";
+            string sqlSelect = "SELECT * FROM reservations WHERE parkingLotName = 'A' AND date = '" + date + "';";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -346,6 +346,7 @@ namespace ProjectTemplate
             return parkingLots.ToArray();
         }
 
+<<<<<<< HEAD
         [WebMethod]
         public ParkingLot[] ViewUnavailableOptions(string date)
         {
@@ -356,31 +357,11 @@ namespace ProjectTemplate
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
             string sqlSelect = "SELECT * FROM reservations WHERE  AND parkingLotName = 'A' AND date = '" + date + "';";
-
-            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
-            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
-
-            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
-            sqlDa.Fill(sqlDt);
-
-            List<ParkingLot> parkingLots = new List<ParkingLot>();
-            for (int i = 0; i < sqlDt.Rows.Count; i++)
-            {
-                parkingLots.Add(new ParkingLot
-                {
-                    reservation_id = Convert.ToInt32(sqlDt.Rows[i]["reservation_id"]),
-                    space_id = Convert.ToInt32(sqlDt.Rows[i]["spaceID"]),
-                    lotName = sqlDt.Rows[i]["parkingLotName"].ToString(),
-                    spotName = sqlDt.Rows[i]["parkingSpotName"].ToString(),
-                    date = sqlDt.Rows[i]["date"].ToString(),
-                    isReserved = sqlDt.Rows[i]["reserved"].ToString()
-                });
-            }
-            return parkingLots.ToArray();
-        }
+=======
+>>>>>>> 29bd6259d915a17c8acf0641e6f422ce64e085ee
 
 
-        
+
 
 
 
