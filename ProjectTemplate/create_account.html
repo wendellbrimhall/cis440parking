@@ -17,16 +17,17 @@
             //This code will toggle the submit button to disabled while the sql query is running
             $('#Submit').prop('disabled', function (i, v) { return !v; });
             console.log("code ran")
+            var parameters = "{\"first\":\"" + encodeURI($('#firstname-register').val()) + "\",\"last\":\"" + encodeURI($('#lastname-register').val()) + "\",\"email\":\"" + encodeURI($('#email-register').val()) + "\",\"pass\":\"" + encodeURI($('#pass').val()) + "\",\"pw\":\"" + encodeURI($('#password-register').val()) + "\",\"licenseplate\":\"" + encodeURI($('#license-register').val()) + "\"}";
 
-            var parameters = { first: $('#firstname-register').val(), last: $('#lastname-register').val(), email: $('#email-register').val(), pass: $('#pass').val(), pw: $('#password-register').val(), licenseplate: $('#license-register').val() };
+            //var parameters = { first: $('#firstname-register').val(), last: $('#lastname-register').val(), email: $('#email-register').val(), pass: $('#pass').val(), pw: $('#password-register').val(), licenseplate: $('#license-register').val() };
             console.log(parameters)
-            var json_data = JSON.stringify(parameters)
+            //var json_data = JSON.stringify(parameters)
 
             //jQuery ajax method
             $.ajax({
                 type: "POST",
                 url: webMethod,
-                data: json_data,
+                data: parameters,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (msg) {
