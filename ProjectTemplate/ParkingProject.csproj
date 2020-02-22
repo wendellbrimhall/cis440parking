@@ -93,7 +93,6 @@
     <Content Include="create_account.html" />
     <Content Include="Global.asax" />
     <Content Include="account_confirmation.html" />
-    <Content Include="HtmlPage1.html" />
     <Content Include="ParkingOptions.html" />
     <Content Include="view_history.html" />
     <Content Include="view_pending.html" />

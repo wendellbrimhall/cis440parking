@@ -68,11 +68,11 @@
             });
         }
 
-        function LogOnHandler() {
+        function LogOnHandler(email, password) {
             console.log("Function started");
             var webMethod = "ProjectServices.asmx/LogOn";
 
-            var parameters = "{\"email\":\"" + encodeURI($('#user_id_input').val()) + "\",\"password\":\"" + encodeURI($('#password_input').val()) + "\"}";
+            var parameters = "{\"email\":\"" + encodeURI(email) + "\",\"password\":\"" + encodeURI(password) + "\"}";
 
             console.log(parameters);
 
@@ -122,7 +122,7 @@
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="index.html" class="text-white">AbracaParking</a></h4>
 
 
-            <
+            <form  class="mb-0 pt-2 pt-md-0"  onsubmit="LogOnHandler($('#user_id_input').val(), $('#password_input').val()); return false;">>
                 <div class="row align-items-center">
                     <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
                         <input  type="text" id="user_id_input"
@@ -133,10 +133,10 @@
                                placeholder="Password" required>
                     </div>
                     <div class="col-md-auto">
-                        <button class="btn btn-primary btn-sm" onclick="javascript: LogOnHandler()">Sign In</button>
+                        <button class="btn btn-primary btn-sm" type="submit">Sign In</button>
                     </div>
                 </div>
-            
+            </form>
 
 
         </div>
