@@ -65,7 +65,7 @@ namespace ProjectTemplate
 			}
 		}
 
-        [WebMethod(EnableSession = true)]
+        [WebMethod]
 
         public string AddUser(string first, string last, string email, string pass, string pw, string licenseplate)
         {
@@ -73,26 +73,29 @@ namespace ProjectTemplate
             ///webmethod to a newuser to the database
             ///
 
-            var UserFirst = first;
-            var UserLast = last;
-            var UserEmail = email;
-            var ParkingPass = pass;
-            var password = pw;
-            var license = licenseplate;
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
+            string sqlSelect = "INSERT INTO `abracadevs`.`users` (`first_name`, `last_name`, `email`, `permit`, `status`, `admin`, `license_plate`, `password`)" +
+                "VALUES (@fnameValue, @lnameValue, @emailValue, @permitValue, 'pending', '0', @licenseValue, @passwordValue);";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+
+            sqlCommand.Parameters.AddWithValue("@fnameValue", HttpUtility.UrlDecode(first));
+            sqlCommand.Parameters.AddWithValue("@lnameValue", HttpUtility.UrlDecode(last));
+            sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
+            sqlCommand.Parameters.AddWithValue("@permitValue", HttpUtility.UrlDecode(pass));
+            sqlCommand.Parameters.AddWithValue("@licenseValue", HttpUtility.UrlDecode(licenseplate));
+            sqlCommand.Parameters.AddWithValue("@passwordValue", HttpUtility.UrlDecode(pw));
+
+            sqlConnection.Open();
             try
             {
-                string addNewUser = "INSERT INTO `abracadevs`.`users` (`first_name`, `last_name`, `email`, `permit`, `status`, `admin`, `license_plate`, `password`) VALUES ('" + UserFirst + "', '" + UserLast + "', '" + UserEmail + "', 'a', 'pending', '0', '" + license + "', '" + password + "');";
-                MySqlConnection con = new MySqlConnection(getConString());
-                MySqlCommand cmd = new MySqlCommand(addNewUser, con);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                DataTable table = new DataTable();
-                adapter.Fill(table);
+                sqlCommand.ExecuteNonQuery();
                 return "Success!";
 
-
             }
-
 
             catch (Exception e)
             {
@@ -100,7 +103,8 @@ namespace ProjectTemplate
                 // Data base is setup to require a unique email and license plate. If a duplicate of either is put in the server will return an error. The follow code will
                 // search the error returned from the server and return appropriate feedback.
 
-                if (str.Contains("email_UNIQUE")){
+                if (str.Contains("email_UNIQUE"))
+                {
                     return "email";
                 }
 
@@ -111,9 +115,10 @@ namespace ProjectTemplate
                 else
                 {
                     return str;
-                }    
-                   
+                }
             }
+            sqlConnection.Close();
+
         }
 
         [WebMethod]
