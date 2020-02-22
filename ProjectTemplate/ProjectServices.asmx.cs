@@ -307,7 +307,9 @@ namespace ProjectTemplate
                     user_id = Convert.ToInt32(sqlDt.Rows[i]["user_id"]),
                     reservation_ID = Convert.ToInt32(sqlDt.Rows[i]["reservation_id"]),
                     spaceID = Convert.ToInt32(sqlDt.Rows[i]["spaceID"]),
-                    date = sqlDt.Rows[i]["date"].ToString()
+                    date = sqlDt.Rows[i]["date"].ToString(),
+                    parkingSpotName = sqlDt.Rows[i]["parkingSpotName"].ToString()
+
 
                 });
             }

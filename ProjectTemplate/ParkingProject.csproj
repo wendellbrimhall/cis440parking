@@ -93,9 +93,10 @@
     <Content Include="create_account.html" />
     <Content Include="Global.asax" />
     <Content Include="account_confirmation.html" />
+    <Content Include="admin.html" />
     <Content Include="ParkingOptions.html" />
-    <Content Include="view_history.html" />
-    <Content Include="view_pending.html" />
+    <Content Include="table.css" />
+    <Content Include="account.html" />
     <Content Include="index.html" />
     <Content Include="ProjectServices.asmx" />
     <Content Include="Web.config" />

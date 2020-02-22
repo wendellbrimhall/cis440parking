@@ -11,6 +11,7 @@ namespace ProjectTemplate
         public int spaceID;
         public int user_id;
         public string date;
+        public string parkingSpotName;
         
 
     }

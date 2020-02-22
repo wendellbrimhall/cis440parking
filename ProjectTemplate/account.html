@@ -1,0 +1,138 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Parking Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"
+            integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0"
+            crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="table.css">
+
+    <script type="text/javascript">
+
+
+
+
+        function loadHistory() {
+
+            var webMethod = "ProjectServices.asmx/ViewHistory";
+            console.log('Function started');
+            var parameters = "{}";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (array) {
+
+                    console.log(array);
+                    var data = array.d;
+                    console.log(data);
+
+                    var tableBody = $("#hist_table");
+
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+
+
+                        for (var i = 0; i < data.length; i++) {
+                            //This loop goes through each user with pending status and adds their first, last and email to a table
+                            //It will also dynamically add an approve and deny button to each row.
+                            var findReservation = data[i].reservation_ID;
+                            var findID = data[i].user_id;
+                            // variables will store the user_id and email address of each row, and place that data in the button function
+
+                            var tableBody = $("#hist_table");
+
+                            var first = "<div class='row'><div class='cell' data-title='First'>" + data[i].date + "</div>";
+                            var second = first + "<div class='cell' data-title='Last'> " + data[i].parkingSpotName + "</div>";
+                            var third = second + "<div class='cell' data-title='Approve'><button onclick='javascript: Report( " + findID + ",  \"" + findReservation + "\");'>Report Issue</button></div>";
+
+
+                            console.log(third);
+
+
+
+                            tableBody.append(third);
+                        }
+                    }
+
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+
+        function Report(user_id, reservation_id) {
+
+        }
+    </script>
+</head>
+
+<body onload="javascript: loadHistory();">
+    <header class="header-bar mb-3">
+        <div class="container d-flex flex-column flex-md-row align-items-center p-3">
+            <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/parking.html" class="text-white">Parking Management</a></h4>
+            <div class="flex-row my-3 my-md-0">
+                <a class="btn btn-sm btn-success mr-2" href="/account.html">Account</a>
+                <a class="btn btn-sm btn-success mr-2" href="/admin.html">Admin</a>
+                <form action="/logout" method="POST" class="d-inline">
+                    <button class="btn btn-sm btn-secondary">Sign Out</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div class="justify-content-center">
+        <div class="table" id="hist_table">
+
+            <div class="row header blue">
+                <div class="cell">
+                    Date
+                </div>
+                <div class="cell">
+                    Spot
+                </div>
+                <div class="cell">
+                    Report
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+        <footer class="border-top text-center small text-muted py-3">
+            <p class="m-0">Copyright &copy; 2020 <a href="/" class="text-muted">Abracadevs</a>. All rights reserved.</p>
+        </footer>
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+                integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+                integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+                crossorigin="anonymous"></script>
+
+        <!-- Eventually could add tool tips -->
+        <script>$('[data-toggle="tooltip"]').tooltip()</script>
+</body>
+
+</html>
