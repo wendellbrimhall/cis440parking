@@ -326,16 +326,18 @@ namespace ProjectTemplate
         }
 
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public ParkingLot[] ViewParkingOptions(string date)
         {
             // view parking options - see a date selector, taken/ open
+
+            var permit = Session["permit"];
 
             DataTable sqlDt = new DataTable("parkingLots");
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
-            string sqlSelect = "SELECT * FROM reservations WHERE parkingLotName = 'A' AND date = '" + date + "';";
+            string sqlSelect = "SELECT * FROM reservations WHERE parkingLotName = '"+permit+"' AND date = '" + date + "';";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -360,16 +362,18 @@ namespace ProjectTemplate
         }
 
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public ParkingLot[] ViewUnavailableOptions(string date)
         {
             // view parking options - see a date selector, taken/ open
 
+
+            var permit = Session["permit"];
             DataTable sqlDt = new DataTable("parkingLots");
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
-            string sqlSelect = "SELECT * FROM reservations WHERE  AND parkingLotName = 'A' AND date = '" + date + "';";
+            string sqlSelect = "SELECT * FROM reservations WHERE  AND parkingLotName = '" + permit + "' AND date = '" + date + "';";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
