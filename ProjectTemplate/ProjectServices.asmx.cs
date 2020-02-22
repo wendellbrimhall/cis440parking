@@ -246,33 +246,34 @@ namespace ProjectTemplate
       
         bool success = false;
 
-        string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
    
-        string sqlSelect = "SELECT email, admin FROM users WHERE email=@emailValue and password=@passValue";
+            string sqlSelect = "SELECT user_id, email, admin, permit password FROM users WHERE email=@emailValue and password=@passValue";
 
  
-        MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
    
-        MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
    
-        sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
-        sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(password));
+            sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
+            sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(password));
 
 
-        MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
     
-        DataTable sqlDt = new DataTable();
+            DataTable sqlDt = new DataTable();
       
-        sqlDa.Fill(sqlDt);
+            sqlDa.Fill(sqlDt);
   
-        if (sqlDt.Rows.Count > 0)
-        {
+            if (sqlDt.Rows.Count > 0)
+            {
 
-        //Session["user_id"] = sqlDt.Rows[0]["user_id"];
-        Session["admin"] = sqlDt.Rows[0]["admin"];
-        success = true;
-        sqlConnection.Close();
+                Session["user_id"] = sqlDt.Rows[0]["user_id"];
+                Session["admin"] = sqlDt.Rows[0]["admin"];
+               // Session["permit"] = sqlDt.Rows[0]["permit"];
+                success = true;
+        
             }
 
         return success;

@@ -10,53 +10,50 @@
     <script type="text/javascript">
    
 
-    //HERE'S AN EXAMPLE OF AN AJAX CALL WITH JQUERY!
-        function LogOnHandler(user_id, password) {
+   
+        function LogOnHandler() {
+            console.log("Function started");
+            var webMethod = "ProjectServices.asmx/LogOn";
 
-    //get values
-            user_id_value = document.getElementById("user_id_input").value;
-            password_value = document.getElementById("password_input").value;
-    //the url of the webservice we will be talking to
-    var webMethod = "ProjectServices.asmx/LogOn";
+            var parameters = "{\"email\":\"" + encodeURI($('#user_id_input').val()) + "\",\"password\":\"" + encodeURI($('#password_input').val()) + "\"}";
 
-    var parameters = "{\"user_id\":\"" + encodeURI(user_id_value) + "\",\"password\":\"" + encodeURI(password_value) + "\"}";
+            console.log(parameters);
 
-    //jQuery ajax method
-    $.ajax({
-    type: "POST",
-    url: webMethod,
-    data: parameters,
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    //ad function with parameters
-    success: function (msg) {
 
-    var responseFromServer = msg.d;
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log(msg.d);
 
-    if (msg.d) {
-    alert("successful login!");
-    }
-    else {
-    alert("login failed");
-    }
-    },
-    error: function (e) {
-    alert("boo...");
-    }
-    });
-    }
+                    if (msg.d == true) {
+                        console.log("successful login!");
+                        window.location.replace("parking.html");
+                    }
+                    else {
+                        console.log("login failed");
+                    }
+                },
+                error: function (e) {
+                    console.log("boo...");
+                }
+            });
+        }
     </script>
 
 </head>
 <body>
 
-  <p>Username:</p>
+  <p>Email:</p>
   <input id="user_id_input" type="text" />
   <br>
   <p>Password:</p>
   <input id="password_input" type="text" name="password">
   <br><br>
-  <button onclick="javascript: LogOn();">Log In</button>
+  <button onclick="javascript: LogOnHandler()">Log In</button>
   <br>
   <a href="create_account.html">Create account</a>
 
