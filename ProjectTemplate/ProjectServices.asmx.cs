@@ -248,7 +248,7 @@ namespace ProjectTemplate
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
    
-            string sqlSelect = "SELECT user_id, email, admin, permit password FROM users WHERE email=@emailValue and password=@passValue";
+            string sqlSelect = "SELECT * FROM users WHERE email=@emailValue and password=@passValue";
 
  
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
@@ -262,7 +262,7 @@ namespace ProjectTemplate
 
             MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
     
-            DataTable sqlDt = new DataTable();
+            DataTable sqlDt = new DataTable("Account");
       
             sqlDa.Fill(sqlDt);
   
@@ -271,7 +271,12 @@ namespace ProjectTemplate
 
                 Session["user_id"] = sqlDt.Rows[0]["user_id"];
                 Session["admin"] = sqlDt.Rows[0]["admin"];
-               // Session["permit"] = sqlDt.Rows[0]["permit"];
+                Session["permit"] = sqlDt.Rows[0]["permit"];
+                Session["first_name"]= sqlDt.Rows[0]["first_name"];
+                Session["last_name"] = sqlDt.Rows[0]["last_name"];
+                Session["license_plate"] = sqlDt.Rows[0]["license_plate"];
+                Session["twitter"] = sqlDt.Rows[0]["twitter"];
+
                 success = true;
         
             }
@@ -282,9 +287,9 @@ namespace ProjectTemplate
         [WebMethod(EnableSession = true)]
         public History[] ViewHistory()
         {
-            // var user = Session["user_id"];
-            var user = 1;
-
+            var user = Session["user_id"];
+           
+    
 
 
             DataTable sqlDt = new DataTable("reservations");
@@ -388,7 +393,21 @@ namespace ProjectTemplate
             return parkingLots.ToArray();
         }
 
+        [WebMethod(EnableSession = true)]
+        public int GetSessionData()
+        {
+            var id = Convert.ToInt32(Session["user_id"]);
+            var ad = Session["admin"];
+            var p = Session["permit"];
 
+
+            return id;
+
+            
+
+
+
+        }
 
 
 
