@@ -91,9 +91,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="create_account.html" />
+    <Content Include="dashboard.html" />
     <Content Include="Global.asax" />
     <Content Include="account_confirmation.html" />
     <Content Include="admin.html" />
+    <Content Include="index.css" />
+    <Content Include="parking.html" />
+    <Content Include="parkinglotA.jpg" />
+    <Content Include="parkinglotB.jpg" />
+    <Content Include="parkinglotC.jpg" />
     <Content Include="parkingOptions.html" />
     <Content Include="table.css" />
     <Content Include="account.html" />
