@@ -289,9 +289,6 @@ namespace ProjectTemplate
         {
             var user = Session["user_id"];
            
-    
-
-
             DataTable sqlDt = new DataTable("reservations");
 
 
@@ -331,49 +328,14 @@ namespace ProjectTemplate
         {
             // view parking options - see a date selector, taken/ open
 
+            var id= Session["user_id"];
             var permit = Session["permit"];
 
             DataTable sqlDt = new DataTable("parkingLots");
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
-            string sqlSelect = "SELECT * FROM reservations WHERE parkingLotName = '"+permit+"' AND date = '" + date + "';";
-
-            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
-            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
-
-            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
-            sqlDa.Fill(sqlDt);
-
-            List<ParkingLot> parkingLots = new List<ParkingLot>();
-            for (int i = 0; i < sqlDt.Rows.Count; i++)
-            {
-                parkingLots.Add(new ParkingLot
-                {
-                    reservation_id = Convert.ToInt32(sqlDt.Rows[i]["reservation_id"]),
-                    space_id = Convert.ToInt32(sqlDt.Rows[i]["spaceID"]),
-                    lotName = sqlDt.Rows[i]["parkingLotName"].ToString(),
-                    spotName = sqlDt.Rows[i]["parkingSpotName"].ToString(),
-                    date = sqlDt.Rows[i]["date"].ToString(),
-                    isReserved = sqlDt.Rows[i]["reserved"].ToString()
-                });
-            }
-            return parkingLots.ToArray();
-        }
-
-
-        [WebMethod(EnableSession = true)]
-        public ParkingLot[] ViewUnavailableOptions(string date)
-        {
-            // view parking options - see a date selector, taken/ open
-
-
-            var permit = Session["permit"];
-            DataTable sqlDt = new DataTable("parkingLots");
-
-            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-
-            string sqlSelect = "SELECT * FROM reservations WHERE  AND parkingLotName = '" + permit + "' AND date = '" + date + "';";
+            string sqlSelect = "SELECT * FROM reservations WHERE parkingLotName = '" + permit + "' AND date = '" + date + "';";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -406,10 +368,6 @@ namespace ProjectTemplate
 
 
             return id;
-
-            
-
-
 
         }
 

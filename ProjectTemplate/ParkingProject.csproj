@@ -94,7 +94,7 @@
     <Content Include="Global.asax" />
     <Content Include="account_confirmation.html" />
     <Content Include="admin.html" />
-    <Content Include="ParkingOptions.html" />
+    <Content Include="parkingOptions.html" />
     <Content Include="table.css" />
     <Content Include="account.html" />
     <Content Include="index.html" />

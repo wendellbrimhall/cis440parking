@@ -88,10 +88,11 @@
 
                     if (msg.d == true) {
                         console.log("successful login!");
-                        window.location.replace("parking.html");
+                        window.location.replace("parkingOptions.html");
                     }
                     else {
                         console.log("login failed");
+                        alert('Login Failed.');
                     }
                 },
                 error: function (e) {
@@ -127,7 +128,7 @@
                 <div class="row align-items-center">
                     <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
                         <input type="text" id="user_id_input"
-                               placeholder="Username" autocomplete="off" required>
+                               placeholder="Email" autocomplete="off" required>
                     </div>
                     <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
                         <input id="password_input" type="password"
