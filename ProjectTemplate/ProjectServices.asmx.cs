@@ -11,59 +11,59 @@ using System.Net.Mail;
 
 namespace ProjectTemplate
 {
-	[WebService(Namespace = "http://tempuri.org/")]
-	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-	[System.ComponentModel.ToolboxItem(false)]
-	[System.Web.Script.Services.ScriptService]
+    [WebService(Namespace = "http://tempuri.org/")]
+    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+    [System.ComponentModel.ToolboxItem(false)]
+    [System.Web.Script.Services.ScriptService]
 
-	public class ProjectServices : System.Web.Services.WebService
-	{
-		////////////////////////////////////////////////////////////////////////
-		///replace the values of these variables with your database credentials
-		////////////////////////////////////////////////////////////////////////
-		private string dbID = "abracadevs";
-		private string dbPass = "!!Abracadevs";
-		private string dbName = "abracadevs";
-		////////////////////////////////////////////////////////////////////////
-		
-		////////////////////////////////////////////////////////////////////////
-		///call this method anywhere that you need the connection string!
-		////////////////////////////////////////////////////////////////////////
-		private string getConString() {
-			return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName+"; UID=" + dbID + "; PASSWORD=" + dbPass;
-		}
-		////////////////////////////////////////////////////////////////////////
+    public class ProjectServices : System.Web.Services.WebService
+    {
+        ////////////////////////////////////////////////////////////////////////
+        ///replace the values of these variables with your database credentials
+        ////////////////////////////////////////////////////////////////////////
+        private string dbID = "abracadevs";
+        private string dbPass = "!!Abracadevs";
+        private string dbName = "abracadevs";
+        ////////////////////////////////////////////////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////
+        ///call this method anywhere that you need the connection string!
+        ////////////////////////////////////////////////////////////////////////
+        private string getConString() {
+            return "SERVER=107.180.1.16; PORT=3306; DATABASE=" + dbName + "; UID=" + dbID + "; PASSWORD=" + dbPass;
+        }
+        ////////////////////////////////////////////////////////////////////////
 
 
 
-		/////////////////////////////////////////////////////////////////////////
-		//don't forget to include this decoration above each method that you want
-		//to be exposed as a web service!
-		[WebMethod(EnableSession = true)]
-		/////////////////////////////////////////////////////////////////////////
-		public string TestConnection()
-		{
-			try
-			{
-				string testQuery = "select * from users";
+        /////////////////////////////////////////////////////////////////////////
+        //don't forget to include this decoration above each method that you want
+        //to be exposed as a web service!
+        [WebMethod(EnableSession = true)]
+        /////////////////////////////////////////////////////////////////////////
+        public string TestConnection()
+        {
+            try
+            {
+                string testQuery = "select * from users";
 
-				////////////////////////////////////////////////////////////////////////
-				///here's an example of using the getConString method!
-				////////////////////////////////////////////////////////////////////////
-				MySqlConnection con = new MySqlConnection(getConString());
-				////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////
+                ///here's an example of using the getConString method!
+                ////////////////////////////////////////////////////////////////////////
+                MySqlConnection con = new MySqlConnection(getConString());
+                ////////////////////////////////////////////////////////////////////////
 
-				MySqlCommand cmd = new MySqlCommand(testQuery, con);
-				MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-				DataTable table = new DataTable();
-				adapter.Fill(table);
-				return "Success!";
-			}
-			catch (Exception e)
-			{
-				return "Something went wrong, please check your credentials and db name and try again.  Error: "+e.Message;
-			}
-		}
+                MySqlCommand cmd = new MySqlCommand(testQuery, con);
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable table = new DataTable();
+                adapter.Fill(table);
+                return "Success!";
+            }
+            catch (Exception e)
+            {
+                return "Something went wrong, please check your credentials and db name and try again.  Error: " + e.Message;
+            }
+        }
 
         [WebMethod]
 
@@ -154,11 +154,15 @@ namespace ProjectTemplate
 
         }
         [WebMethod]
-        public void ActivateAccount(int user_id, string email )
+        public void ActivateAccount(int user_id, string email)
         {
+            var subject = "Parking account approved";
+            var body = "Hello, your parking account has been approved";
+
+
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
             //this is a simple update, with parameters to pass in values
-            string sqlSelect = "update users set status='active' where user_id=" + user_id+ "";
+            string sqlSelect = "update users set status='active' where user_id=" + user_id + "";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -169,7 +173,7 @@ namespace ProjectTemplate
             try
             {
                 sqlCommand.ExecuteNonQuery();
-                SendEmail(email);
+                SendEmail(email, subject, body);
                 //after activating account SendEmail is called to send notification to user
             }
             catch (Exception e)
@@ -177,7 +181,7 @@ namespace ProjectTemplate
             }
             sqlConnection.Close();
 
-            
+
 
         }
         [WebMethod]
@@ -204,14 +208,13 @@ namespace ProjectTemplate
         }
 
         [WebMethod]
-        public void SendEmail(string recipient)
+        public void SendEmail(string recipient, string subject, string body)
         ///This webmethod will send out an email from cis440parking@asu.edu using googles
         ///SMTP server. Currently it is just used for sending out a confirmation that the 
         ///users account has been approved. Will update code later to add additional messages
         {
             var toAddress = recipient;
-            var subject = "Parking account approved";
-            var body = "Hello, your parking account has been approved";
+           
 
 
             using (MailMessage mail = new MailMessage())
@@ -240,55 +243,56 @@ namespace ProjectTemplate
             }
         }
 
-        [WebMethod(EnableSession = true)] 
+        [WebMethod(EnableSession = true)]
         public bool LogOn(string email, string password)
-        { 
-      
-        bool success = false;
+        {
+
+            bool success = false;
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-   
+
             string sqlSelect = "SELECT * FROM users WHERE email=@emailValue and password=SHA1(@passValue)";
 
- 
+
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
-   
+
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
-   
+
             sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
             sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(password));
 
 
             MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
-    
+
             DataTable sqlDt = new DataTable("Account");
-      
+
             sqlDa.Fill(sqlDt);
-  
+
             if (sqlDt.Rows.Count > 0)
             {
 
                 Session["user_id"] = sqlDt.Rows[0]["user_id"];
                 Session["admin"] = sqlDt.Rows[0]["admin"];
                 Session["permit"] = sqlDt.Rows[0]["permit"];
-                Session["first_name"]= sqlDt.Rows[0]["first_name"];
+                Session["first_name"] = sqlDt.Rows[0]["first_name"];
+                Session["email"] = sqlDt.Rows[0]["email"];
                 Session["last_name"] = sqlDt.Rows[0]["last_name"];
                 Session["license_plate"] = sqlDt.Rows[0]["license_plate"];
                 Session["twitter"] = sqlDt.Rows[0]["twitter"];
 
                 success = true;
-        
+
             }
 
-        return success;
+            return success;
         }
 
         [WebMethod(EnableSession = true)]
         public History[] ViewHistory()
         {
             var user = Session["user_id"];
-           
+
             DataTable sqlDt = new DataTable("reservations");
 
 
@@ -315,7 +319,7 @@ namespace ProjectTemplate
 
                 });
             }
-           
+
 
             return history.ToArray();
 
@@ -328,7 +332,7 @@ namespace ProjectTemplate
         {
             // view parking options - see a date selector, taken/ open
 
-            var id= Session["user_id"];
+            var id = Session["user_id"];
             var permit = Session["permit"];
 
             DataTable sqlDt = new DataTable("parkingLots");
@@ -371,6 +375,50 @@ namespace ProjectTemplate
 
         }
 
+        [WebMethod(EnableSession = true)]
+        public bool GetReservation(string reservation_id )
+            {
+            var recipient = Session["email"];
+            var first_name = Session["first_name"];
+          
+            var subject = "Parking Spot Reserverd";
+            var body = "<p>" + first_name + "</p><br><p>You have reserved a parking spot.</p>";
+
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            var user_id = Session["user_id"];
+
+            string sqlSelect = "UPDATE `abracadevs`.`reservations` SET `user_id` = '" + user_id + "', `reserved` = '1' WHERE (`reservation_id` = '"+reservation_id+"');";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(reservation_id));
+
+            sqlConnection.Open();
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                
+                //SendEmail(recipient, subject, body);
+                //after activating account SendEmail is called to send notification to user
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            sqlConnection.Close();
+
+
+
+     
+
+            }
+
+
+
+            
 
 
     }

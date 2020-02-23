@@ -20,7 +20,8 @@
             var parameters = "{\"first\":\"" + encodeURI($('#firstname-register').val()) + "\",\"last\":\"" + encodeURI($('#lastname-register').val()) + "\",\"email\":\"" + encodeURI($('#email-register').val()) + "\",\"pass\":\"" + encodeURI($('#pass').val()) + "\",\"pw\":\"" + encodeURI($('#password-register').val()) + "\",\"licenseplate\":\"" + encodeURI($('#license-register').val()) + "\"}";
 
            
-     
+            console.log(parameters)
+            //var json_data = JSON.stringify(parameters)
 
             //jQuery ajax method
             $.ajax({
@@ -85,7 +86,8 @@
                     console.log(msg.d);
 
                     if (msg.d == true) {
-                    
+
+                       
                         window.location.replace("parking.html");
                     }
                     else {
