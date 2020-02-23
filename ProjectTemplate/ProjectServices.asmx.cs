@@ -76,7 +76,7 @@ namespace ProjectTemplate
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
             string sqlSelect = "INSERT INTO `abracadevs`.`users` (`first_name`, `last_name`, `email`, `permit`, `status`, `admin`, `license_plate`, `password`)" +
-                "VALUES (@fnameValue, @lnameValue, @emailValue, @permitValue, 'pending', '0', @licenseValue, @passwordValue);";
+                "VALUES (@fnameValue, @lnameValue, @emailValue, @permitValue, 'pending', '0', @licenseValue, SHA1(@passwordValue));";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -248,7 +248,7 @@ namespace ProjectTemplate
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
    
-            string sqlSelect = "SELECT * FROM users WHERE email=@emailValue and password=@passValue";
+            string sqlSelect = "SELECT * FROM users WHERE email=@emailValue and password=SHA1(@passValue)";
 
  
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
