@@ -43,21 +43,23 @@
 
                     parkingOptionsArray = array.d;
 
-                    document.write('<p>Spot(s) Available:</p>');
+                    var display_results = $('.results');                
+
+                    display_results.append('<p>Spot(s) Available:</p>');
 
                     for (var i = 0; i < parkingOptionsArray.length; i++) {
-                        if (parkingOptionsArray[i].isReserved == 0) {
-                            document.write('<p>' + parkingOptionsArray[i].spotName + '    <button>Select</button><br></p>');
+                        if (parkingOptionsArray[i].isReserved == 0) {                         
+                            display_results.append('<p>' + parkingOptionsArray[i].spotName + '    <button>Select</button><br></p>');
                         }
 
                     }
-                    document.write('<hr/>');
+                    display_results.append('<hr/>');
 
-                    document.write('<p>Spot(s) Unavailable: </p>')
+                    display_results.append('<p>Spot(s) Unavailable: </p>');
 
                     for (var i = 0; i < parkingOptionsArray.length; i++) {
                         if (parkingOptionsArray[i].isReserved == 1) {
-                            document.write('<p>' + parkingOptionsArray[i].spotName + '   <br></p>');
+                            display_results.append('<p>' + parkingOptionsArray[i].spotName + '   <br></p>');
                         }
                     }
 
@@ -115,6 +117,7 @@
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="results">
                         <!--<form onsubmit="return LoadSpots()" method="post">  <!--PROBLEM-->
                         <div class="form-group">
                             <label class="control-label requiredField" for="date">
@@ -135,6 +138,8 @@
                         </div>
                         <!--</form>-->
                     </div>
+                    </div>
+
                 </div>
             </div>
         </div>
