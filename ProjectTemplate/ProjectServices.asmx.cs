@@ -245,6 +245,7 @@ namespace ProjectTemplate
 
         [WebMethod(EnableSession = true)]
         public bool LogOn(string email, string password)
+<<<<<<< HEAD
         {
 
             bool success = false;
@@ -359,6 +360,47 @@ namespace ProjectTemplate
                     date = sqlDt.Rows[i]["date"].ToString(),
                     isReserved = sqlDt.Rows[i]["reserved"].ToString()
                 });
+=======
+        { 
+      
+        bool success = false;
+
+        string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+        string sqlSelect = "SELECT user_id, first_name, last_name, email, permit, status, admin, license_plate, password FROM users WHERE email=@emailValue and password=@passValue";
+
+
+        MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+   
+        MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+   
+        sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
+        sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(password));
+
+
+        MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+    
+        DataTable sqlDt = new DataTable();
+      
+        sqlDa.Fill(sqlDt);
+  
+        if (sqlDt.Rows.Count > 0)
+        {
+
+        Session["user_id"] = sqlDt.Rows[0]["user_id"];
+        Session["first_name"] = sqlDt.Rows[0]["first_name"];
+        Session["last_name"] = sqlDt.Rows[0]["last_name"];
+        Session["email"] = sqlDt.Rows[0]["email"];
+        Session["permit"] = sqlDt.Rows[0]["permit"];
+        Session["status"] = sqlDt.Rows[0]["status"];
+        Session["admin"] = sqlDt.Rows[0]["admin"];
+        Session["license_plate"] = sqlDt.Rows[0]["license_plate"];
+        Session["password"] = sqlDt.Rows[0]["password"];
+
+        success = true;
+        sqlConnection.Close();
+>>>>>>> login
             }
             return parkingLots.ToArray();
         }
