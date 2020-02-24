@@ -242,10 +242,10 @@ namespace ProjectTemplate
         bool success = false;
 
         string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-   
-        string sqlSelect = "SELECT email, admin FROM users WHERE email=@emailValue and password=@passValue";
 
- 
+        string sqlSelect = "SELECT user_id, first_name, last_name, email, permit, status, admin, license_plate, password FROM users WHERE email=@emailValue and password=@passValue";
+
+
         MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
    
         MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -264,8 +264,16 @@ namespace ProjectTemplate
         if (sqlDt.Rows.Count > 0)
         {
 
-        //Session["user_id"] = sqlDt.Rows[0]["user_id"];
+        Session["user_id"] = sqlDt.Rows[0]["user_id"];
+        Session["first_name"] = sqlDt.Rows[0]["first_name"];
+        Session["last_name"] = sqlDt.Rows[0]["last_name"];
+        Session["email"] = sqlDt.Rows[0]["email"];
+        Session["permit"] = sqlDt.Rows[0]["permit"];
+        Session["status"] = sqlDt.Rows[0]["status"];
         Session["admin"] = sqlDt.Rows[0]["admin"];
+        Session["license_plate"] = sqlDt.Rows[0]["license_plate"];
+        Session["password"] = sqlDt.Rows[0]["password"];
+
         success = true;
         sqlConnection.Close();
             }
