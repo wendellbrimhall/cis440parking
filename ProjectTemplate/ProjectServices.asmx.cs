@@ -360,7 +360,6 @@ namespace ProjectTemplate
                     date = sqlDt.Rows[i]["date"].ToString(),
                     isReserved = sqlDt.Rows[i]["reserved"].ToString()
                 });
-=======
         { 
       
         bool success = false;
@@ -400,6 +399,7 @@ namespace ProjectTemplate
 
         success = true;
         sqlConnection.Close();
+
 >>>>>>> login
             }
             return parkingLots.ToArray();
