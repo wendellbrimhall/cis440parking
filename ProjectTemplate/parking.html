@@ -93,6 +93,27 @@
 
         }
 
+        //logs the user off both at the client and at the server
+        function LogOutHandler() {
+
+            var webMethod = "ProjectServices.asmx/LogOut";
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+            
+                    if (msg.d) {
+                        window.location.replace("index.html");
+                    }
+                    else {
+                    }
+                },
+                error: function (e) {
+                    alert("boo...");
+                }
+
     </script>
 </head>
 
@@ -101,11 +122,11 @@
         <div class="container d-flex flex-column flex-md-row align-items-center p-3">
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/parking.html" class="text-white">Parking Management</a></h4>
             <div class="flex-row my-3 my-md-0">
-                <a class="btn btn-sm btn-success mr-2" href="/account.html">Account</a>              
+                <a class="btn btn-sm btn-success mr-2" href="/account.html">Account</a>
                 <a class="btn btn-sm btn-success mr-2" href="/admin.html">Admin</a>
-                <form action="/logout" method="POST" class="d-inline">
-                    <button class="btn btn-sm btn-secondary">Sign Out</button>
-                </form>
+                <!--<form action="/logout" method="POST" class="d-inline">-->
+                <a class="btn btn-sm btn-success mr-2" onclick="LogOutHandler()" href="/index.html" >Sign Out</a>
+                <!--</form>-->
             </div>
         </div>
     </header>

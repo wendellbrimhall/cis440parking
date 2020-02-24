@@ -410,16 +410,15 @@ namespace ProjectTemplate
             }
             sqlConnection.Close();
 
-
-
-     
-
             }
 
-
-
-            
-
+        [WebMethod(EnableSession = true)]
+        public bool LogOut()
+        {
+            //log off session
+            Session.Abandon();
+            return true;
+        }
 
     }
 }

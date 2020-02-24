@@ -120,21 +120,26 @@
     <header class="header-bar mb-3">
         <div class="container d-flex flex-column flex-md-row align-items-center p-3">
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="index.html" class="text-white">AbracaParking</a></h4>
-
-
-            <form  class="mb-0 pt-2 pt-md-0"  onsubmit="LogOnHandler($('#user_id_input').val(), $('#password_input').val()); return false;">>
-                <div class="row align-items-center">
-                    <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-                        <input  type="text" id="user_id_input"
-                               placeholder="Username" autocomplete="off" required>
-                    </div>
-                    <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
-                        <input  id="password_input" type="password"
-                               placeholder="Password" required>
-                    </div>
-                    <div class="col-md-auto">
+                    <!--</div>-->
+                    <form class="mb-0 pt-2 pt-md-0" onsubmit="LogOnHandler($('#user_id_input').val(), $('#password_input').val()); return false;">
+                        >
+                        <div class="row align-items-center">
+                            <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+                                <input type="text" id="user_id_input"
+                                       placeholder="Email" autocomplete="off" required>
+                            </div>
+                            <div class="col-md mr-0 pr-md-0 mb-3 mb-md-0">
+                                <input id="password_input" type="password"
+                                       placeholder="Password" required>
+                            </div>
+                            <div class="col-md-auto">
+                                <button class="btn btn-primary btn-sm" type="submit">Sign In</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!--<div class="col-md-auto">
                         <button class="btn btn-primary btn-sm" type="submit">Sign In</button>
-                    </div>
+                    </div>-->
                 </div>
             </form>
 
