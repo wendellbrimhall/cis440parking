@@ -418,6 +418,7 @@ namespace ProjectTemplate
         }
 
         [WebMethod(EnableSession = true)]
+<<<<<<< HEAD
         public bool GetReservation(string reservation_id )
             {
             var recipient = Session["email"];
@@ -462,6 +463,14 @@ namespace ProjectTemplate
 
             
 
+=======
+        public bool LogOff()
+        {
+            //log off session
+            Session.Abandon();
+            return true;
+        }
+>>>>>>> login
 
     }
 }
