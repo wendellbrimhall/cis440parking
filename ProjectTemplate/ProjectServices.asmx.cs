@@ -376,7 +376,7 @@ namespace ProjectTemplate
         }
 
         [WebMethod(EnableSession = true)]
-        public bool GetReservation(string reservation_id )
+        public bool GetReservation(string email, string reservation_id )
             {
             var recipient = Session["email"];
             var first_name = Session["first_name"];
