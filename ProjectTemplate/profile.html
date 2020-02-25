@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Parking Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"
+        integrity="sha384-GqVMZRt5Gn7tB9D9q7ONtcp4gtHIUEW/yG7h98J7IpE3kpi+srfFyyB/04OV6pG0"
+        crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header class="header-bar mb-3">
+        <div class="container d-flex flex-column flex-md-row align-items-center p-3">
+            <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/" class="text-white">Parking Management</a></h4>
+            <div class="flex-row my-3 my-md-0">
+                <a class="btn btn-sm btn-success mr-2" href="/park">Park</a>
+                <a class="btn btn-sm btn-success mr-2" href="/issue">Report</a>
+
+                <form action="/logout" method="POST" class="d-inline">
+                    <button class="btn btn-sm btn-secondary">Sign Out</button>
+                </form>
+
+            </div>
+
+
+        </div>
+    </header>
+
+    <div class="container py-md-5 container--narrow">
+        <div class="text-center">
+            <h3><strong>My Account</strong></h3>
+            <p>View and edit your personal information below</p>
+        </div>
+        <hr>
+
+        <span>Login Email: </span><label for="email-label">sql req</label>
+
+        <form action="/login" method="POST">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" id="first-name-label">
+
+                    <br>
+
+                    <label>Contact Email</label>
+                    <input type="text" class="form-control" id="contact-email-label">
+
+                    <br>
+
+                    <label>License Plate</label>
+                    <input type="text" class="form-control" id="license-plate-label">
+
+
+                </div>
+
+                <div class="col-sm-6">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" id="last-name-label">
+
+                    <br>
+
+                    <label>Phone Number</label>
+                    <input type="text" class="form-control" id="phone-number-label">
+
+                    <br>
+                    <br>
+                    <h5>Select a Lot</h5>
+                    <label class="radio-lot">
+                        <input type="radio" name="lot-radio" checked>A
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="lot-radio">B
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="lot-radio">C
+                    </label>
+
+
+                </div>
+            </div>
+
+            <br>
+            <div class="col-md-auto">
+                <button class="btn btn-primary btn-block">Update Information</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container py-md-5 container--narrow">
+        <div class="text-center">
+            <h3>Parking History</h3>
+
+            <br>
+
+            <!-- THIS IS THE LIST THAT WILL BE UPDATED AS ON REQUEST -->
+            <ol id="parking-history">
+            </ol>
+        </div>
+    </div>
+
+    <footer class="border-top text-center small text-muted py-3">
+        <p class="m-0">Copyright &copy; 2020 <a href="/" class="text-muted">Abracadevs</a>. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <!-- Eventually could add tool tips -->
+    <script>$('[data-toggle="tooltip"]').tooltip()</script>
+</body>
+
+</html>
