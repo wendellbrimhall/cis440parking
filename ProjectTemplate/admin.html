@@ -32,15 +32,9 @@
                 data: parameters,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (array) {
-
-
-                    console.log(array);
+                success: function (array) {                
                     var data = array.d;
-                    console.log(data);
-
-
-
+                   
 
                     for (var i = 0; i < data.length; i++) {
                         //This loop goes through each user with pending status and adds their first, last and email to a table
@@ -153,6 +147,10 @@
                     alert("boo...");
                 }
 
+            });
+        }
+        
+
     </script>
 </head>
 
@@ -162,10 +160,10 @@
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/parking.html" class="text-white">Parking Management</a></h4>
             <div class="flex-row my-3 my-md-0">
                 <a class="btn btn-sm btn-success mr-2" href="/account.html">Account</a>
-                <a class="btn btn-sm btn-success mr-2" href="/issue">Report</a>
+                <a class="btn btn-sm btn-success mr-2" href="/adming.html">Admin</a>
                 <form action="/logout" method="POST" class="d-inline">
                     <!--<button class="btn btn-sm btn-secondary">Sign Out</button>-->
-                    <a class="btn btn-sm btn-success mr-2" onclick="LogOutHandler()" href="/index.html">Sign Out</a>
+                    <a class="btn btn-sm btn-secondary mr-2" onclick="LogOutHandler()" href="/index.html">Sign Out</a>
 
                 </form>
             </div>
@@ -174,7 +172,7 @@
 
 
     <div class="row justify-content-left">
-        <div class="table" id="pend_table">
+        <div class="table" id="pend_table" margin: 0px; margin-bottom: 0rem;>
 
             <div class="row header blue">
                 <div class="cell">

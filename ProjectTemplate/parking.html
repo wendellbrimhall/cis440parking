@@ -103,7 +103,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (msg) {
-            
+
                     if (msg.d) {
                         window.location.replace("index.html");
                     }
@@ -113,6 +113,60 @@
                 error: function (e) {
                     alert("boo...");
                 }
+            });
+        }
+
+            $(document).ready(function () {
+                //function to check if the user is an admin. If true then the admin button will appear at the top of the page for the user
+                var webMethod = "ProjectServices.asmx/CheckAdmin";
+                var parameters = "{}";
+
+                $.ajax({
+                    type: "POST",
+                    url: webMethod,
+                    data: parameters,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+                        if (response.d == true) {
+                            var first = "<div class='flex-row my - 3 my - md - 0'>";
+                            $("#loadButtons").append(first);
+                            var second = "<a class='btn btn-sm btn-success mr-2' href = '/account.html'>Account</a>";
+                            $("#loadButtons").append(second);
+                            var third = "<a class='btn btn-sm btn-success mr-2' href='/admin.html'>Admin</a>";
+                            $("#loadButtons").append(third);
+                            var fourth = "<form action = '/logout' method = 'POST' class='d-inline' >";
+                            $("#loadButtons").append(fourth);
+                            var fifth = " <a class='btn btn-sm btn-secondary' onclick='LogOutHandler()' href='/index.html'>Sign Out</a></form> ";
+                            
+                            $("#loadButtons").append(fifth);
+
+                        }
+                        else {
+                            var first = "<div class='flex-row my - 3 my - md - 0'>";
+                            $("#loadButtons").append(first);
+                            var second = "<a class='btn btn-sm btn-success mr-2' href = '/account.html'>Account</a>";
+                            $("#loadButtons").append(second);
+                            var third = "<form action = '/logout' method = 'POST' class='d-inline' >";
+                            $("#loadButtons").append(third);
+                            var fourth = " <a class='btn btn-sm btn-secondary' onclick='LogOutHandler()' href='/index.html'>Sign Out</a></form> ";
+                            $("#loadButtons").append(fourth);
+
+                        }
+
+
+
+                    },
+                    error: function () {
+                        alert("user is not admin.");
+
+
+                    }
+                });
+
+
+            });
 
     </script>
 </head>
@@ -122,11 +176,8 @@
         <div class="container d-flex flex-column flex-md-row align-items-center p-3">
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/parking.html" class="text-white">Parking Management</a></h4>
             <div class="flex-row my-3 my-md-0">
-                <a class="btn btn-sm btn-success mr-2" href="/account.html">Account</a>
-                <a class="btn btn-sm btn-success mr-2" href="/admin.html">Admin</a>
-                <!--<form action="/logout" method="POST" class="d-inline">-->
-                <a class="btn btn-sm btn-success mr-2" onclick="LogOutHandler()" href="/index.html" >Sign Out</a>
-                <!--</form>-->
+                <div id="loadButtons">
+                </div>
             </div>
         </div>
     </header>

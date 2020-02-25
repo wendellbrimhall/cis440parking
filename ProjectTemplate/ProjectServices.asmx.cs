@@ -420,5 +420,25 @@ namespace ProjectTemplate
             return true;
         }
 
+
+        [WebMethod(EnableSession = true)]
+        public bool CheckAdmin()
+        {
+
+            var admin = Convert.ToInt32(Session["admin"]);
+            if (admin == 1)
+            {
+                return true;
+
+            }
+
+            else
+            {
+                return false;
+            }
+
+
+        }
+
     }
 }
