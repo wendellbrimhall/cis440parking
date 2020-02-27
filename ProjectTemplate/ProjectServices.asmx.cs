@@ -66,7 +66,6 @@ namespace ProjectTemplate
         }
 
         [WebMethod]
-
         public string AddUser(string first, string last, string email, string pass, string pw, string licenseplate)
         {
 
@@ -376,7 +375,7 @@ namespace ProjectTemplate
         }
 
         [WebMethod(EnableSession = true)]
-        public bool GetReservation(string email, string reservation_id )
+        public bool GetReservation(string reservation_id )
             {
             var recipient = Session["email"];
             var first_name = Session["first_name"];
@@ -439,6 +438,42 @@ namespace ProjectTemplate
 
 
         }
+
+        [WebMethod(EnableSession = true)]
+        public void AddReport(string resID, string text)
+        {
+
+            var user = Session["user_id"];
+            var subject = "Report received";
+            var body = "Hello, your parking account has been approved";
+
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            //this is a simple update, with parameters to pass in values
+            string sqlSelect = "INSERT INTO `abracadevs`.`reported_issues` (`user_id`, reservation_id, `text`, `origin`) VALUES ('1', '" + resID + "', '" + text + "', 'Web');";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            //sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(user_id));
+
+            sqlConnection.Open();
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                //SendEmail(email, subject, body);
+                //after activating account SendEmail is called to send notification to user
+            }
+            catch (Exception e)
+            {
+            }
+            sqlConnection.Close();
+
+
+
+        }
+
 
     }
 }
