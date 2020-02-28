@@ -14,6 +14,9 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
 
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <link rel="stylesheet" type="text/css" href="table.css">
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -86,19 +89,183 @@
             });
         }
 
+        function loadHistory() {
+
+            var webMethod = "ProjectServices.asmx/ViewHistory";
+            console.log('Function started');
+            var parameters = "{}";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (array) {
+
+                    console.log(array);
+                    var data = array.d;
+                    console.log(data);
+
+                    var tableBody = $("#hist_table");
+
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+
+
+                        for (var i = 0; i < data.length; i++) {
+                            //This loop goes through each user with pending status and adds their first, last and email to a table
+                            //It will also dynamically add an approve and deny button to each row.
+                            var findReservation = data[i].reservation_ID;
+
+                            // variables will store the user_id and email address of each row, and place that data in the button function
+
+                            var tableBody = $("#hist_table");
+
+                            var first = "<div class='row'><div class='cell' data-title='First'>" + data[i].date + "</div>";
+                            var second = first + "<div class='cell' data-title='Last'> " + data[i].parkingSpotName + "</div>";
+                            //var third = second + "<div class='cell' data-title='Approve'><button onclick='javascript: Report(" + findReservation + ");'>Report Issue</button></div>";
+                            var third = second + "<div class='cell' data-title='Approve'><button id='" + findReservation + "' onclick='javascript: Report(" + findReservation + ");'>Report Issue</button></div>";
+
+                            console.log(third);
+
+
+
+                            tableBody.append(third);
+                        }
+                    }
+
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+
+        //logs the user off both at the client and at the server
+        function LogOutHandler() {
+
+            var webMethod = "ProjectServices.asmx/LogOut";
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+
+                    if (msg.d) {
+                        window.location.replace("index.html");
+                    }
+                    else {
+                    }
+                },
+                error: function (e) {
+                    alert("boo...");
+                }
+            });
+
+        }
+        $(document).ready(function () {
+            //function to check if the user is an admin. If true then the admin button will appear at the top of the page for the user
+            var webMethod = "ProjectServices.asmx/CheckAdmin";
+            var parameters = "{}";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    if (response.d == true) {
+                        var first = "<div class='flex-row my - 3 my - md - 0'>";
+                        $("#loadButtons").append(first);
+                        var second = "<a class='btn btn-sm btn-success mr-2' href = '/editAccount.html'>Account</a>";
+                        $("#loadButtons").append(second);
+                        var third = "<a class='btn btn-sm btn-success mr-2' href='/admin.html'>Admin</a>";
+                        $("#loadButtons").append(third);
+                        var fourth = "<form action = '/logout' method = 'POST' class='d-inline' >";
+                        $("#loadButtons").append(fourth);
+                        var fifth = "<a class='btn btn-sm btn-secondary' onclick='LogOutHandler()' href='/index.html'>Sign Out</a></form> ";
+                        $("#loadButtons").append(fifth);
+
+                    }
+                    else {
+                        var first = "<div class='flex-row my - 3 my - md - 0'>";
+                        $("#loadButtons").append(first);
+                        var second = "<a class='btn btn-sm btn-success mr-2' href = '/editAccount.html'>Account</a>";
+                        $("#loadButtons").append(second);
+                        var third = "<form action = '/logout' method = 'POST' class='d-inline' >";
+                        $("#loadButtons").append(third);
+                        var fourth = "<a class='btn btn-sm btn-secondary' onclick='LogOutHandler()' href='/index.html'>Sign Out</a></form>";
+                        $("#loadButtons").append(fourth);
+
+                    }
+
+
+
+                },
+                error: function () {
+                    alert("user is not admin.");
+
+
+                }
+            });
+
+
+        });
+
+
+        function Report(reservation_id) {
+            var complaint = prompt("Please enter the details of your issue.");
+
+            if (complaint != null) {
+
+                $("#" + reservation_id + "").prop('disabled', true);
+
+                var webMethod = "ProjectServices.asmx/AddReport";
+                var parameters = { resID: reservation_id, text: complaint };
+
+                var json_data = JSON.stringify(parameters)
+
+
+                //jQuery ajax method
+                $.ajax({
+                    type: "POST",
+                    url: webMethod,
+                    data: json_data,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function () {
+                        alert(" Report Submitted");
+
+
+                    },
+                    error: function () {
+                        alert("something broke");
+                    }
+
+                });
+            }
+
+        }
+
     </script>
 </head>
 
-<body onload="LoadInfo()">
+<body onload="LoadInfo(), loadHistory()">
     <header class="header-bar mb-3">
         <div class="container d-flex flex-column flex-md-row align-items-center p-3">
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="parking.html" class="text-white">Parking Management</a></h4>
             <div class="flex-row my-3 my-md-0">
-                <a class="btn btn-sm btn-success mr-2" href="/park">Park</a>
-                <a class="btn btn-sm btn-success mr-2" href="/issue">Report</a>
-                <form action="/logout" method="POST" class="d-inline">
-                    <button class="btn btn-sm btn-secondary">Sign Out</button>
-                </form>
+                <a class="btn btn-sm btn-success mr-2" href="editAccount.html">Account</a>
+                <!--<a class="btn btn-sm btn-success mr-2" href="/issue">Report</a>-->
+                <!--form method="POST" class="d-inline">-->
+                <!--<button onclick="index.html" class="btn btn-sm btn-secondary">Sign Out</button>-->
+                <a class='btn btn-sm btn-secondary' onclick='LogOutHandler()' href='/index.html'>Sign Out</a>
+                <!--</form>-->
 
             </div>
 
@@ -115,21 +282,33 @@
 
         <!--<span>Login Email: </span><label for="email-label">sql req</label>-->
         <!--<form action="LoadInfo()" method="POST">-->
-        <div class="row">
+        <div id="row">
             <div class="col-sm-6">
                 <label>First Name</label>
                 <input type="text" class="form-control" id="first_name">
+                <br>
+
+                <label>Last Name</label>
+                <input type="text" class="form-control" id="last_name">
                 <br>
 
                 <label>Email</label>
                 <input type="text" class="form-control" id="email">
                 <br>
 
+                <label>Password</label>
+                <input type="password" class="form-control" id="password">
+                <br>
+
                 <label>License Plate</label>
                 <input type="text" class="form-control" id="license_plate">
                 <br>
 
-                <h5>Select a Lot</h5>
+                <label>Twitter</label>
+                <input type="text" class="form-control" id="twitter">
+                <br>
+
+                <h6>Select a Lot</h6>
                 <label class="dropdownList-lot">
                     <select id="permit" class="form-control">
                         <option value="A">A</option>
@@ -137,22 +316,7 @@
                         <option value="C">C</option>
                     </select>
                 </label>
-
-            </div>
-
-            <div class="col-sm-6">
-                <label>Last Name</label>
-                <input type="text" class="form-control" id="last_name">
-                <br>
-
-                <label>Password</label>
-                <input type="password" class="form-control" id="password">
-                <br>
-
-                <label>Twitter</label>
-                <input type="text" class="form-control" id="twitter">
-                <br>                
-            </div>
+            </div>    
         </div>
         <br>
 
@@ -162,13 +326,34 @@
         <!--</form>-->
     </div>
 
+    
     <div class="container py-md-5 container--narrow">
         <div class="text-center">
+            <hr>
             <h3>Parking History</h3>
             <br>
 
             <!-- THIS IS THE LIST THAT WILL BE UPDATED AS ON REQUEST -->
             <ol id="parking-history"></ol>
+
+            <div class="justify-content-center">
+                <div class="table" id="hist_table">
+
+                    <div class="row header blue">
+                        <div class="cell">
+                            Date
+                        </div>
+                        <div class="cell">
+                            Spot
+                        </div>
+                        <div class="cell">
+                            Report
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 

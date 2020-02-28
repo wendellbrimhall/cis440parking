@@ -494,8 +494,8 @@ namespace ProjectTemplate
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
-            //string sqlSelect = "SELECT * FROM users WHERE user_id = '" + id + "';";
-            string sqlSelect = "SELECT * FROM users WHERE user_id = '79';";
+            string sqlSelect = "SELECT * FROM users WHERE user_id = '" + id + "';";
+            //string sqlSelect = "SELECT * FROM users WHERE user_id = '79';";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
@@ -527,12 +527,12 @@ namespace ProjectTemplate
         [WebMethod(EnableSession = true)]
         public string UpdateAccount(string first_name, string last_name, string email, string license_plate, string twitter, string password, string permit) 
         {
-            var user_id = Session["user_id"];
+            var id = Session["user_id"];
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
             string sqlSelect = "UPDATE users set first_name=@firstNameValue, last_name=@lastNameValue, email=@emailValue, password=SHA1(@passwordValue), " +
-                                "license_plate=@licensePlateValue, twitter=@twitterValue, permit=@permitValue where user_id=79;";
+                                "license_plate=@licensePlateValue, twitter=@twitterValue, permit=@permitValue where user_id='"+ id+"';";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
