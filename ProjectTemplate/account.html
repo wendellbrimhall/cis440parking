@@ -59,8 +59,8 @@
 
                             var first = "<div class='row'><div class='cell' data-title='First'>" + data[i].date + "</div>";
                             var second = first + "<div class='cell' data-title='Last'> " + data[i].parkingSpotName + "</div>";
-                            var third = second + "<div class='cell' data-title='Approve'><button onclick='javascript: Report(" + findReservation + ");'>Report Issue</button></div>";
-                            //var third = second + "<div class='cell' data-title='Approve'><button id='" + findReservation + "' onclick='javascript: Report( " + data[i].date + ",  \"" + findReservation + "\");'>Report Issue</button></div>";
+                            //var third = second + "<div class='cell' data-title='Approve'><button onclick='javascript: Report(" + findReservation + ");'>Report Issue</button></div>";
+                            var third = second + "<div class='cell' data-title='Approve'><button id='" + findReservation + "' onclick='javascript: Report(" + findReservation + ");'>Report Issue</button></div>";
 
                             console.log(third);
 
@@ -157,31 +157,36 @@
 
         function Report(reservation_id) {
             var complaint = prompt("Please enter the details of your issue.");
-            //$(" #" + reservation_id +"").prop('disabled', function (i, v) { return !v; });
-            
-            var webMethod = "ProjectServices.asmx/AddReport";
-            var parameters = { resID: reservation_id, text: complaint };
 
-            var json_data = JSON.stringify(parameters)
+            if (complaint != null) {
+
+                $("#" + reservation_id + "").prop('disabled', true);
+
+                var webMethod = "ProjectServices.asmx/AddReport";
+                var parameters = { resID: reservation_id, text: complaint };
+
+                var json_data = JSON.stringify(parameters)
 
 
-            //jQuery ajax method
-            $.ajax({
-                type: "POST",
-                url: webMethod,
-                data: json_data,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function () {
-                    alert(" Report Submitted");
-                    
+                //jQuery ajax method
+                $.ajax({
+                    type: "POST",
+                    url: webMethod,
+                    data: json_data,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function () {
+                        alert(" Report Submitted");
 
-                },
-                error: function () {
-                    alert("something broke");
-                }
 
-            });
+                    },
+                    error: function () {
+                        alert("something broke");
+                    }
+
+                });
+            }
+        
         }
 
 
