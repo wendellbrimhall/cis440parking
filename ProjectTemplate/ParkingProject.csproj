@@ -95,6 +95,7 @@
     <Content Include="Global.asax" />
     <Content Include="account_confirmation.html" />
     <Content Include="admin.html" />
+    <Content Include="editAccount.html" />
     <Content Include="index.css" />
     <Content Include="parking.html" />
     <Content Include="parkinglotA.jpg" />
