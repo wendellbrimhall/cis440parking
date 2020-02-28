@@ -156,7 +156,7 @@ namespace ProjectTemplate
         public void ActivateAccount(int user_id, string email)
         {
             var subject = "Parking account approved";
-            var body = "Hello, your parking account has been approved";
+            var body = "<p>Hello,</p>Your parking account has been approved</p>";
 
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
@@ -377,12 +377,8 @@ namespace ProjectTemplate
         [WebMethod(EnableSession = true)]
         public bool GetReservation(string reservation_id )
             {
-            var recipient = Session["email"];
-            var first_name = Session["first_name"];
+           
           
-            var subject = "Parking Spot Reserverd";
-            var body = "<p>" + first_name + "</p><br><p>You have reserved a parking spot.</p>";
-
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
             var user_id = Session["user_id"];
@@ -398,8 +394,8 @@ namespace ProjectTemplate
             try
             {
                 sqlCommand.ExecuteNonQuery();
-                
-                //SendEmail(recipient, subject, body);
+
+                SendReservationConfirmation(reservation_id);
                 //after activating account SendEmail is called to send notification to user
                 return true;
             }
@@ -410,6 +406,40 @@ namespace ProjectTemplate
             sqlConnection.Close();
 
             }
+
+        [WebMethod(EnableSession = true)]
+        public void SendReservationConfirmation(string reservation_id)
+        {
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+
+            string sqlSelect = "Select reservations.parkingSpotName, reservations.parkingLotName, reservations.date, users.first_name, users.email From reservations right join users on reservations.user_id = users.user_id Where reservations.reservation_id = " + reservation_id + ";";
+
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+
+            DataTable sqlDt = new DataTable("Account");
+
+            sqlDa.Fill(sqlDt);
+
+                
+                var first_name = sqlDt.Rows[0]["first_name"].ToString();
+                var email = sqlDt.Rows[0]["email"].ToString();
+                var parkingSpotName = sqlDt.Rows[0]["parkingSpotName"].ToString();
+                var parkingLotName = sqlDt.Rows[0]["parkingLotName"].ToString();
+                var date = sqlDt.Rows[0]["date"].ToString();
+
+            var subject = "Parking Spot Reserverd";
+            var body = "<p>" + first_name + "</p><br><p>This email is confirming that you have reserved parking spot "+ parkingSpotName + " in Lot "+ parkingLotName+" on " + date +". </p> <p>Thank you for using AbracaParking!</p>";
+
+            SendEmail(email, subject, body);
+
+        }
 
         [WebMethod(EnableSession = true)]
         public bool LogOut()
@@ -462,18 +492,50 @@ namespace ProjectTemplate
             try
             {
                 sqlCommand.ExecuteNonQuery();
-                //SendEmail(email, subject, body);
-                //after activating account SendEmail is called to send notification to user
+                SendReportConfirmation(resID, text);
             }
             catch (Exception e)
             {
             }
             sqlConnection.Close();
 
-
-
         }
 
+
+
+        [WebMethod(EnableSession = true)]
+        public void SendReportConfirmation(string reservation_id, string text)
+        {
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+
+            string sqlSelect = "Select reservations.parkingSpotName, reservations.parkingLotName, reservations.date, users.first_name, users.email From reservations right join users on reservations.user_id = users.user_id Where reservations.reservation_id = " + reservation_id + ";";
+
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+
+            DataTable sqlDt = new DataTable("Account");
+
+            sqlDa.Fill(sqlDt);
+
+
+            var first_name = sqlDt.Rows[0]["first_name"].ToString();
+            var email = sqlDt.Rows[0]["email"].ToString();
+            var parkingSpotName = sqlDt.Rows[0]["parkingSpotName"].ToString();
+            var parkingLotName = sqlDt.Rows[0]["parkingLotName"].ToString();
+            var date = sqlDt.Rows[0]["date"].ToString();
+
+            var subject = "Parking issue reported";
+            var body = "<p>" + first_name + "</p><br><p>This email is confirming that we have received your complaint about your reservation for parking spot " + parkingSpotName + " in Lot " + parkingLotName + " on " + date + ". We will investigate this issue right away. You will find a copy of the complaint below.</p><p> <i>" + text + "</i></p> <p>Thank you for using AbracaParking!</p>";
+
+            SendEmail(email, subject, body);
+
+        }
 
 
         [WebMethod(EnableSession = true)]
