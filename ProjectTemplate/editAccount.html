@@ -166,6 +166,8 @@
             });
 
         }
+
+
         $(document).ready(function () {
             //function to check if the user is an admin. If true then the admin button will appear at the top of the page for the user
             var webMethod = "ProjectServices.asmx/CheckAdmin";
@@ -178,6 +180,8 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
+
+                    console.log(response.d);
 
                     if (response.d == true) {
                         var first = "<div class='flex-row my - 3 my - md - 0'>";
@@ -260,12 +264,8 @@
         <div class="container d-flex flex-column flex-md-row align-items-center p-3">
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="parking.html" class="text-white">Parking Management</a></h4>
             <div class="flex-row my-3 my-md-0">
-                <a class="btn btn-sm btn-success mr-2" href="editAccount.html">Account</a>
-                <!--<a class="btn btn-sm btn-success mr-2" href="/issue">Report</a>-->
-                <!--form method="POST" class="d-inline">-->
-                <!--<button onclick="index.html" class="btn btn-sm btn-secondary">Sign Out</button>-->
-                <a class='btn btn-sm btn-secondary' onclick='LogOutHandler()' href='/index.html'>Sign Out</a>
-                <!--</form>-->
+                <div id="loadButtons">
+                </div>
 
             </div>
 
