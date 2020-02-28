@@ -475,5 +475,94 @@ namespace ProjectTemplate
         }
 
 
+
+        [WebMethod(EnableSession = true)]
+        public Account[] ViewAccountInfo()
+        {
+            // view parking options - see a date selector, taken/ open
+
+            var id = Session["user_id"];
+            var first_name = Session["first_name"];
+            var last_name = Session["last_name"];
+            var email = Session["email"];
+            var password = Session["password"];  
+            var license_plate = Session["license_plate"];
+            var twitter = Session["twitter"];
+            var permit = Session["permit"];
+
+            DataTable sqlDt = new DataTable("user");
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            //string sqlSelect = "SELECT * FROM users WHERE user_id = '" + id + "';";
+            string sqlSelect = "SELECT * FROM users WHERE user_id = '79';";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<Account> accountInfo = new List<Account>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                accountInfo.Add(new Account
+                {
+                    user_id = Convert.ToInt32(sqlDt.Rows[i]["user_id"]),
+                    password = sqlDt.Rows[i]["password"].ToString(),
+                    first_name = sqlDt.Rows[i]["first_name"].ToString(),
+                    last_name = sqlDt.Rows[i]["last_name"].ToString(),
+                    email = sqlDt.Rows[i]["email"].ToString(),
+                    permit = sqlDt.Rows[i]["permit"].ToString(),
+                    license_plate = sqlDt.Rows[i]["license_plate"].ToString(),
+                    twitter = sqlDt.Rows[i]["twitter"].ToString()
+                });
+            }
+            return accountInfo.ToArray();
+
+        }
+
+
+
+        [WebMethod(EnableSession = true)]
+        public string UpdateAccount(string first_name, string last_name, string email, string license_plate, string twitter, string password, string permit) 
+        {
+            var user_id = Session["user_id"];
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+
+            string sqlSelect = "UPDATE users set first_name=@firstNameValue, last_name=@lastNameValue, email=@emailValue, password=SHA1(@passwordValue), " +
+                                "license_plate=@licensePlateValue, twitter=@twitterValue, permit=@permitValue where user_id=79;";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+
+            sqlCommand.Parameters.AddWithValue("@firstNameValue", HttpUtility.UrlDecode(first_name));
+            sqlCommand.Parameters.AddWithValue("@lastNameValue", HttpUtility.UrlDecode(last_name));
+            sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
+            sqlCommand.Parameters.AddWithValue("@passwordValue", HttpUtility.UrlDecode(password));  
+            sqlCommand.Parameters.AddWithValue("@licensePlateValue", HttpUtility.UrlDecode(license_plate));
+            sqlCommand.Parameters.AddWithValue("@twitterValue", HttpUtility.UrlDecode(twitter));
+            sqlCommand.Parameters.AddWithValue("@permitValue", HttpUtility.UrlDecode(permit));
+
+            sqlConnection.Open();
+
+            try
+            {
+                sqlCommand.ExecuteNonQuery();
+                return "Success!";
+            }
+            catch (Exception e)
+            {
+
+                var str = e.ToString();
+                return str;
+            }
+            sqlConnection.Close();
+
+        }
+
+
     }
 }

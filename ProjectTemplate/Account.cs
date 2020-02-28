@@ -15,5 +15,8 @@ namespace ProjectTemplate
         public string first_name;
         public string last_name;
         public string email;
+        public string permit;
+        public string license_plate;
+        public string twitter;
     }
 }
