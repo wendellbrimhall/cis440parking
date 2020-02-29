@@ -502,6 +502,47 @@ namespace ProjectTemplate
         }
 
 
+        [WebMethod(EnableSession = true)]
+        public Report[] ViewReports()
+        {
+            var user = Session["user_id"];
+
+            DataTable sqlDt = new DataTable("reported_issues");
+
+
+            string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
+            string sqlSelect = "select * from reported_issues";
+
+            MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
+            MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
+
+            MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
+            sqlDa.Fill(sqlDt);
+
+            List<Report> report = new List<Report>();
+            for (int i = 0; i < sqlDt.Rows.Count; i++)
+            {
+                report.Add(new Report
+                {
+                    report_id = Convert.ToInt32(sqlDt.Rows[i]["report_id"]),
+                    user_id = Convert.ToInt32(sqlDt.Rows[i]["user_id"]),
+
+
+                    text = sqlDt.Rows[i]["text"].ToString(),
+                    origin = sqlDt.Rows[i]["origin"].ToString(),
+
+
+
+                });
+            }
+
+
+            return report.ToArray();
+
+
+        }
+
+
 
         [WebMethod(EnableSession = true)]
         public void SendReportConfirmation(string reservation_id, string text)

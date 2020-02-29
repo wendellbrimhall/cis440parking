@@ -21,6 +21,60 @@
 
     <script type="text/javascript">
 
+        function loadReports() {
+
+            var webMethod = "ProjectServices.asmx/ViewReports";
+            console.log('Function started');
+            var parameters = "{}";
+
+            $.ajax({
+                type: "POST",
+                url: webMethod,
+                data: parameters,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (array) {
+
+                    console.log(array);
+                    var data = array.d;
+                    console.log(data);
+
+                    var tableBody = $("#rep_table");
+
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+
+
+                        for (var i = 0; i < data.length; i++) {
+                            //This loop goes through each user with pending status and adds their first, last and email to a table
+                            //It will also dynamically add an approve and deny button to each row.
+                            var findRep = data[i].report_id;
+
+                            // variables will store the user_id and email address of each row, and place that data in the button function
+
+                            var tableBody = $("#rep_table");
+
+                            var first = "<div class='row'><div class='cell' data-title='First'>" + data[i].user_id + "</div>";
+                            var second = first + "<div class='cell' data-title='date'> " + data[i].report_id + "</div>";
+                            var third = second + "<div class='cell' data-title='text'>" + data[i].text + "</div>";
+                            var fourth = third + "<div class='cell' data-title='text'>" + data[i].origin + "</div>";
+
+                            console.log(fourth);
+
+
+
+                            tableBody.append(fourth);
+                        }
+                    }
+
+                },
+                error: function (e) {
+                    alert("this code will only execute if javascript is unable to access the webservice");
+                }
+            });
+
+        }
+
         function load_Accounts() {
             var webMethod = "ProjectServices.asmx/GetAccountRequests";
             var parameters = "{}";
@@ -154,7 +208,7 @@
     </script>
 </head>
 
-<body onload="javascript: load_Accounts();">
+<body onload="javascript: load_Accounts(), loadReports();">
     <header class="header-bar mb-3">
         <div class="container d-flex flex-column flex-md-row align-items-center p-3">
             <h4 class="my-0 mr-md-auto font-weight-normal"><a href="/parking.html" class="text-white">Parking Management</a></h4>
@@ -170,7 +224,7 @@
         </div>
     </header>
 
-
+    <h4>Pending Accounts</h4>
     <div class="row justify-content-left">
         <div class="table" id="pend_table" margin: 0px; margin-bottom: 0rem;>
 
@@ -193,25 +247,52 @@
             </div>
 
         </div>
+    </div>
+
+    <br />
+
+    <h4>Reported Issues</h4>
+    <div class="justify-content-center">
+        <div class="table" id="rep_table">
+
+            <div class="row header blue">
+                <div class="cell">
+                    User ID
+                </div>
+                <div class="cell">
+                    Report ID
+                </div>
+                <div class="cell">
+                    Issue
+                </div>
+                <div class="cell">
+                    Origin
+                </div>
+
+            </div>
+
         </div>
+    </div>
 
 
 
-        <footer class="border-top text-center small text-muted py-3">
-            <p class="m-0">Copyright &copy; 2020 <a href="/" class="text-muted">Abracadevs</a>. All rights reserved.</p>
-        </footer>
+
+
+    <footer class="border-top text-center small text-muted py-3">
+        <p class="m-0">Copyright &copy; 2020 <a href="/" class="text-muted">Abracadevs</a>. All rights reserved.</p>
+    </footer>
 
 
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-                integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-                crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-                integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-                crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
 
-        <!-- Eventually could add tool tips -->
-        <script>$('[data-toggle="tooltip"]').tooltip()</script>
+    <!-- Eventually could add tool tips -->
+    <script>$('[data-toggle="tooltip"]').tooltip()</script>
 </body>
 
 </html>

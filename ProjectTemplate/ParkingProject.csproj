@@ -111,6 +111,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Account.cs" />
+    <Compile Include="Report.cs" />
     <Compile Include="ParkingLot.cs" />
     <Compile Include="History.cs" />
     <Compile Include="Global.asax.cs">
