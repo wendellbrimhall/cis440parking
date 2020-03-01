@@ -587,8 +587,7 @@ namespace ProjectTemplate
             var id = Session["user_id"];
             var first_name = Session["first_name"];
             var last_name = Session["last_name"];
-            var email = Session["email"];
-            var password = Session["password"];  
+            var email = Session["email"];  
             var license_plate = Session["license_plate"];
             var twitter = Session["twitter"];
             var permit = Session["permit"];
@@ -628,26 +627,25 @@ namespace ProjectTemplate
 
 
         [WebMethod(EnableSession = true)]
-        public string UpdateAccount(string first_name, string last_name, string email, string license_plate, string twitter, string password, string permit) 
+        public string UpdateAccount(string first_name, string last_name, string email, string license_plate, string twitter,  string permit) 
         {
             var id = Session["user_id"];
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
-            string sqlSelect = "UPDATE users set first_name=@firstNameValue, last_name=@lastNameValue, email=@emailValue, password=SHA1(@passwordValue), " +
-                                "license_plate=@licensePlateValue, twitter=@twitterValue, permit=@permitValue where user_id='"+ id+"';";
+            string sqlSelect = "UPDATE users set first_name='"+ first_name + "', last_name='"+ last_name + "', email='" + email + "', " +
+                                "license_plate='" + license_plate + "', twitter='"+twitter+ "', permit='" + permit+ "' where user_id="+ id+";";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
 
-            sqlCommand.Parameters.AddWithValue("@firstNameValue", HttpUtility.UrlDecode(first_name));
-            sqlCommand.Parameters.AddWithValue("@lastNameValue", HttpUtility.UrlDecode(last_name));
-            sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
-            sqlCommand.Parameters.AddWithValue("@passwordValue", HttpUtility.UrlDecode(password));  
-            sqlCommand.Parameters.AddWithValue("@licensePlateValue", HttpUtility.UrlDecode(license_plate));
-            sqlCommand.Parameters.AddWithValue("@twitterValue", HttpUtility.UrlDecode(twitter));
-            sqlCommand.Parameters.AddWithValue("@permitValue", HttpUtility.UrlDecode(permit));
+            //sqlCommand.Parameters.AddWithValue("@firstNameValue", HttpUtility.UrlDecode(first_name));
+            //sqlCommand.Parameters.AddWithValue("@lastNameValue", HttpUtility.UrlDecode(last_name));
+            //sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email)); 
+            //sqlCommand.Parameters.AddWithValue("@licensePlateValue", HttpUtility.UrlDecode(license_plate));
+            //sqlCommand.Parameters.AddWithValue("@twitterValue", HttpUtility.UrlDecode(twitter));
+            //sqlCommand.Parameters.AddWithValue("@permitValue", HttpUtility.UrlDecode(permit));
 
             sqlConnection.Open();
 

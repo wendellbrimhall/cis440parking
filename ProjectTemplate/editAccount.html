@@ -47,7 +47,6 @@
                     document.getElementById("email").value = infoArray[0]["email"];
                     document.getElementById("license_plate").value = infoArray[0]["license_plate"];
                     document.getElementById("last_name").value = infoArray[0]["last_name"];
-                    document.getElementById("password").value = infoArray[0]["password"];
                     document.getElementById("twitter").value = infoArray[0]["twitter"];
                     document.getElementById("permit").value = infoArray[0]["permit"];
                 }
@@ -60,10 +59,10 @@
             var webMethod = "ProjectServices.asmx/UpdateAccount";
             var parameters = {
                 first_name: $("#first_name").val(),
+                last_name: $("#last_name").val(),
                 email: $("#email").val(),
                 license_plate: $("#license_plate").val(),
-                last_name: $("#last_name").val(),
-                password: $("#password").val(),
+               
                 twitter: $("#twitter").val(),
                 permit: $("#permit").val()
             };
