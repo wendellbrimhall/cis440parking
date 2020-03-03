@@ -434,7 +434,7 @@ namespace ProjectTemplate
                 var parkingLotName = sqlDt.Rows[0]["parkingLotName"].ToString();
                 var date = sqlDt.Rows[0]["date"].ToString();
 
-            var subject = "Parking Spot Reserverd";
+            var subject = "Parking Spot Reservered";
             var body = "<p>" + first_name + "</p><br><p>This email is confirming that you have reserved parking spot "+ parkingSpotName + " in Lot "+ parkingLotName+" on " + date +". </p> <p>Thank you for using AbracaParking!</p>";
 
             SendEmail(email, subject, body);
