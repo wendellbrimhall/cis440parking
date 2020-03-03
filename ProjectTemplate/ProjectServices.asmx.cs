@@ -652,6 +652,15 @@ namespace ProjectTemplate
             try
             {
                 sqlCommand.ExecuteNonQuery();
+
+               
+                Session["first_name"] = first_name;
+                Session["last_name"] = last_name;
+                Session["email"] = email;
+                Session["license_plate"] = license_plate;
+                Session["twitter"] = twitter;
+                Session["permit"] = permit;
+
                 return "Success!";
             }
             catch (Exception e)
