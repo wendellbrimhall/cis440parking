@@ -70,7 +70,7 @@ namespace ProjectTemplate
         {
 
             ///webmethod to a newuser to the database
-            ///
+           
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
@@ -122,7 +122,7 @@ namespace ProjectTemplate
 
         [WebMethod]
         public Account[] GetAccountRequests()
-        {//LOGIC: get all account requests and return them!
+        {//This function will query the data base for all of the users marked as pending. It will then return all users to JSON so that a table of pending accounts can be created.
 
             DataTable sqlDt = new DataTable("users");
 
@@ -155,6 +155,7 @@ namespace ProjectTemplate
         [WebMethod]
         public void ActivateAccount(int user_id, string email)
         {
+            //This function will activate a users account by updating the database.
             var subject = "Parking account approved";
             var body = "<p>Hello,</p>Your parking account has been approved</p>";
 
@@ -166,7 +167,7 @@ namespace ProjectTemplate
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
-            //sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(user_id));
+          
 
             sqlConnection.Open();
             try
@@ -185,15 +186,16 @@ namespace ProjectTemplate
         }
         [WebMethod]
         public void DeactivateAccount(int user_id)
+            //This method will deactivate an account. 
         {
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-            //this is a simple update, with parameters to pass in values
+            
             string sqlSelect = "update users set status='deactive' where user_id=" + user_id + "";
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
 
-            //sqlCommand.Parameters.AddWithValue("@idValue", HttpUtility.UrlDecode(user_id));
+            
 
             sqlConnection.Open();
             try
@@ -209,8 +211,8 @@ namespace ProjectTemplate
         [WebMethod]
         public void SendEmail(string recipient, string subject, string body)
         ///This webmethod will send out an email from cis440parking@asu.edu using googles
-        ///SMTP server. Currently it is just used for sending out a confirmation that the 
-        ///users account has been approved. Will update code later to add additional messages
+        ///SMTP server. 
+       
         {
             var toAddress = recipient;
            
@@ -231,7 +233,7 @@ namespace ProjectTemplate
                 mail.Subject = subject;
                 mail.Body = body;
                 mail.IsBodyHtml = true;
-                //mail.Attachments.Add(new Attachment("D:\\TestFile.txt"));//--Uncomment this to send any attachment  
+                
                 using (SmtpClient smtp = new SmtpClient(smtpAddr, portNumber))
                 {
                     smtp.Credentials = new NetworkCredential(fromAddress, password);
@@ -290,6 +292,7 @@ namespace ProjectTemplate
         [WebMethod(EnableSession = true)]
         public History[] ViewHistory()
         {
+            //This function uses the session object to get the current users  user_id so that it can query the data base and get all of the parking records for the user.
             var user = Session["user_id"];
 
             DataTable sqlDt = new DataTable("reservations");
@@ -396,7 +399,7 @@ namespace ProjectTemplate
                 sqlCommand.ExecuteNonQuery();
 
                 SendReservationConfirmation(reservation_id);
-                //after activating account SendEmail is called to send notification to user
+                //after the reservation is made, the SendReservationConfirmation function is called to notify the user that their spot has been reserved
                 return true;
             }
             catch (Exception e)
@@ -409,20 +412,14 @@ namespace ProjectTemplate
 
         [WebMethod(EnableSession = true)]
         public void SendReservationConfirmation(string reservation_id)
-        {
+        {// This function will query the data base to get the info about a parking reservation so that information can be put into a string and emailedto the user
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-
 
             string sqlSelect = "Select reservations.parkingSpotName, reservations.parkingLotName, reservations.date, users.first_name, users.email From reservations right join users on reservations.user_id = users.user_id Where reservations.reservation_id = " + reservation_id + ";";
 
-
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
-
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
-
-
             MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
-
             DataTable sqlDt = new DataTable("Account");
 
             sqlDa.Fill(sqlDt);
@@ -452,7 +449,7 @@ namespace ProjectTemplate
 
         [WebMethod(EnableSession = true)]
         public bool CheckAdmin()
-        {
+        {// this function is called to check if the user is an admin.
 
             var admin = Convert.ToInt32(Session["admin"]);
             if (admin == 1)
@@ -471,11 +468,9 @@ namespace ProjectTemplate
 
         [WebMethod(EnableSession = true)]
         public void AddReport(string resID, string text)
-        {
+        {//Function to add a reported issue to the data base. After database has been updated, the SendReportConfirmation function is called to notify the user that their reported issue was received.
 
             var user = Session["user_id"];
-            var subject = "Report received";
-            var body = "Hello, your parking account has been approved";
 
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
@@ -546,7 +541,7 @@ namespace ProjectTemplate
 
         [WebMethod(EnableSession = true)]
         public void SendReportConfirmation(string reservation_id, string text)
-        {
+        {//This function gets all of the data for a user and a reservation so that it can be packaged and send to the SendEmail function.
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
 
@@ -554,12 +549,8 @@ namespace ProjectTemplate
 
 
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
-
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
-
-
             MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
-
             DataTable sqlDt = new DataTable("Account");
 
             sqlDa.Fill(sqlDt);

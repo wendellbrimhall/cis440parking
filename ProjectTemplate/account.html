@@ -39,9 +39,7 @@
                 success: function (array) {
 
                     console.log(array);
-                    var data = array.d;
-                    console.log(data);
-
+                    var data = array.d;          
                     var tableBody = $("#hist_table");
 
                     console.log(data);
@@ -53,16 +51,15 @@
                             //It will also dynamically add an approve and deny button to each row.
                             var findReservation = data[i].reservation_ID;
                             
-                            // variables will store the user_id and email address of each row, and place that data in the button function
+                            // variables will store reservtation_ID and pass it to the Report function when clicked
 
                             var tableBody = $("#hist_table");
 
                             var first = "<div class='row'><div class='cell' data-title='First'>" + data[i].date + "</div>";
                             var second = first + "<div class='cell' data-title='Last'> " + data[i].parkingSpotName + "</div>";
-                            //var third = second + "<div class='cell' data-title='Approve'><button onclick='javascript: Report(" + findReservation + ");'>Report Issue</button></div>";
                             var third = second + "<div class='cell' data-title='Approve'><button id='" + findReservation + "' onclick='javascript: Report(" + findReservation + ");'>Report Issue</button></div>";
 
-                            console.log(third);
+                            
 
 
 
@@ -141,12 +138,9 @@
 
                     }
 
-
-
                 },
                 error: function () {
                     alert("user is not admin.");
-
 
                 }
             });
@@ -156,6 +150,8 @@
 
 
         function Report(reservation_id) {
+            // This function is called when the user presses the report button next to a reservation in the reservation history. It allows the user to enter their complaint then calls a webmethod to 
+            //stor the complaint in the database.
             var complaint = prompt("Please enter the details of your issue.");
 
             if (complaint != null) {
