@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script>
+
+    //logs on user using email and pasword
     function LogOnHandler(email, password) {
     console.log("Function started");
     var webMethod = "ProjectServices.asmx/LogOn";
@@ -16,7 +18,6 @@
     var parameters = "{\"email\":\"" + encodeURI(email) + "\",\"password\":\"" + encodeURI(password) + "\"}";
 
     console.log(parameters);
-
 
     $.ajax({
     type: "POST",
@@ -27,6 +28,7 @@
     success: function (msg) {
     console.log(msg.d);
 
+    //if login successful directs to parking.html page
     if (msg.d == true) {
     console.log("successful login!");
     window.location.replace("parking.html");

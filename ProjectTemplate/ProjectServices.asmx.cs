@@ -70,8 +70,6 @@ namespace ProjectTemplate
         {
 
             ///webmethod to a newuser to the database
-           
-
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
 
             string sqlSelect = "INSERT INTO `abracadevs`.`users` (`first_name`, `last_name`, `email`, `permit`, `status`, `admin`, `license_plate`, `password`)" +
@@ -246,33 +244,26 @@ namespace ProjectTemplate
 
         [WebMethod(EnableSession = true)]
         public bool LogOn(string email, string password)
+        //This web method log the user in using their eamil and password 
         {
 
             bool success = false;
-
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
-
             string sqlSelect = "SELECT * FROM users WHERE email=@emailValue and password=SHA1(@passValue)";
 
-
             MySqlConnection sqlConnection = new MySqlConnection(sqlConnectString);
-
             MySqlCommand sqlCommand = new MySqlCommand(sqlSelect, sqlConnection);
-
 
             sqlCommand.Parameters.AddWithValue("@emailValue", HttpUtility.UrlDecode(email));
             sqlCommand.Parameters.AddWithValue("@passValue", HttpUtility.UrlDecode(password));
 
-
             MySqlDataAdapter sqlDa = new MySqlDataAdapter(sqlCommand);
-
             DataTable sqlDt = new DataTable("Account");
-
             sqlDa.Fill(sqlDt);
 
             if (sqlDt.Rows.Count > 0)
             {
-
+                //Session variables
                 Session["user_id"] = sqlDt.Rows[0]["user_id"];
                 Session["admin"] = sqlDt.Rows[0]["admin"];
                 Session["permit"] = sqlDt.Rows[0]["permit"];
@@ -380,8 +371,6 @@ namespace ProjectTemplate
         [WebMethod(EnableSession = true)]
         public bool GetReservation(string reservation_id )
             {
-           
-          
 
             string sqlConnectString = System.Configuration.ConfigurationManager.ConnectionStrings["myDB"].ConnectionString;
             var user_id = Session["user_id"];
@@ -439,6 +428,7 @@ namespace ProjectTemplate
         }
 
         [WebMethod(EnableSession = true)]
+        // This method logs off the user
         public bool LogOut()
         {
             //log off session
